@@ -268,6 +268,15 @@ footer b{color:var(--dim)}
 @supports not (-webkit-background-clip:text){.launch .row.ice,.flagline{background:none;color:var(--ink)}}
 </style>
 <noscript><style>.rv{opacity:1;transform:none}</style></noscript>
+
+<!-- ===== SCENE GRAFT (central, 24/08, Jared's word "idm the canvas id=scene") =====
+     Earth-limb + streak-stars + gold satellite, scoped to #pad (LAUNCH PAD) and
+     tuned to the ascent palette. Port into the template build to survive regen. -->
+<style id="scene-graft-css">
+#scene{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#pad{overflow:hidden;isolation:isolate}
+#pad .shell{position:relative;z-index:1}
+</style>
 </head>
 <body>
 
@@ -720,5 +729,65 @@ footer b{color:var(--dim)}
   addEventListener("keydown",function(e){if(e.key==="Escape"&&!lb.hidden)closeLb()});
 })();
 </script>
+
+<script id="scene-graft-js">
+/* SCENE GRAFT — see scene-graft css note above. Deterministic; still frame under
+   reduced-motion or ?noreveal; self-heals on resize. */
+(function(){
+  var pad=document.getElementById('pad');if(!pad)return;
+  var c=document.createElement('canvas');c.id='scene';c.setAttribute('aria-hidden','true');
+  pad.insertBefore(c,pad.firstChild);
+  if(!c.getContext)return;
+  var x=c.getContext('2d'),W,H,DPR,stars=[],
+      SG_STILL=/[?&]noreveal/.test(location.search),
+      SG_RED=matchMedia('(prefers-reduced-motion:reduce)').matches||SG_STILL;
+  function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+  function build(){
+    DPR=Math.min(devicePixelRatio||1,2);
+    W=c.width=c.offsetWidth*DPR;H=c.height=c.offsetHeight*DPR;
+    var r=rng(21170824);stars=[];
+    for(var i=0;i<Math.min(300,W*H/8000);i++)
+      stars.push({x:(r()*2-1),y:(r()*2-1),z:.15+r()*.85,tw:r()*6.28,g:i%17===0});
+  }
+  function frame(t){
+    x.clearRect(0,0,W,H);
+    var cx=W*.5,cy=H*.40,sc=Math.max(W,H)*.62;
+    for(var i=0;i<stars.length;i++){var s=stars[i];
+      if(!SG_RED){s.z-=.00040;if(s.z<=.12)s.z=1}
+      var px=cx+s.x/s.z*sc*.5,py=cy+s.y/s.z*sc*.5;
+      if(px<-20||px>W+20||py<-20||py>H+20)continue;
+      var pz=cx+s.x/(s.z+.02)*sc*.5,pzy=cy+s.y/(s.z+.02)*sc*.5;
+      var a=Math.min(1,(1-s.z))*(SG_RED?.6:.45+.35*Math.abs(Math.sin(t/1900+s.tw)));
+      x.strokeStyle=s.g?'rgba(233,188,106,'+(a*.8)+')':'rgba(216,233,248,'+(a*.75)+')';
+      x.lineWidth=Math.max(.6,(1.35-s.z)*1.6)*DPR*.6;
+      x.beginPath();x.moveTo(pz,pzy);x.lineTo(px,py);x.stroke();
+    }
+    var er=W*.95,ex=W*.5,ey=H+er*.82;
+    var atm=x.createRadialGradient(ex,ey,er*.96,ex,ey,er*1.10);
+    atm.addColorStop(0,'rgba(143,227,255,0)');atm.addColorStop(.55,'rgba(143,227,255,.18)');
+    atm.addColorStop(.75,'rgba(58,160,216,.09)');atm.addColorStop(1,'rgba(0,0,0,0)');
+    x.fillStyle=atm;x.beginPath();x.arc(ex,ey,er*1.12,0,6.29);x.fill();
+    var mars=x.createRadialGradient(W*.86,H*.55,0,W*.86,H*.55,H*.6);
+    mars.addColorStop(0,'rgba(140,47,20,.10)');mars.addColorStop(1,'rgba(0,0,0,0)');
+    x.fillStyle=mars;x.fillRect(0,0,W,H);
+    var body=x.createRadialGradient(ex-er*.3,ey-er*.9,er*.2,ex,ey,er);
+    body.addColorStop(0,'#0F2138');body.addColorStop(.7,'#091524');body.addColorStop(1,'#050B14');
+    x.fillStyle=body;x.beginPath();x.arc(ex,ey,er,0,6.29);x.fill();
+    x.strokeStyle='rgba(143,227,255,.75)';x.lineWidth=1.4*DPR;
+    x.beginPath();x.arc(ex,ey,er,Math.PI*1.15,Math.PI*1.85);x.stroke();
+    var st=SG_RED?.35:((t/40000)%1);
+    var ang=Math.PI*(1.16+.68*st);
+    var sx2=ex+Math.cos(ang)*er*1.045,sy2=ey+Math.sin(ang)*er*1.045;
+    var sg=x.createRadialGradient(sx2,sy2,0,sx2,sy2,9*DPR);
+    sg.addColorStop(0,'rgba(233,188,106,.85)');sg.addColorStop(1,'rgba(233,188,106,0)');
+    x.fillStyle=sg;x.fillRect(sx2-9*DPR,sy2-9*DPR,18*DPR,18*DPR);
+    x.fillStyle='#F2DFB4';x.fillRect(sx2-1.4*DPR,sy2-1.4*DPR,2.8*DPR,2.8*DPR);
+    if(!SG_RED)requestAnimationFrame(frame);
+  }
+  build();addEventListener('resize',function(){build();if(SG_RED)frame(0)});
+  if(SG_RED)frame(0);else requestAnimationFrame(frame);
+})();
+</script>
+
 </body>
 </html>
