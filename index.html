@@ -87,6 +87,12 @@ nav.jump a:hover{color:var(--aurora);border-bottom-color:var(--aurora)}
 #hud b{color:var(--ink)}
 #hud .alt{color:var(--gold)}
 @media (max-width:900px),(max-height:560px){#hud{display:none}}
+
+/* mobile mission instruments: where the rail + HUD are hidden, a gradient
+   progress bar rides the top edge and a mini phase chip sits clear of the thumb */
+#topbar{position:fixed;top:0;left:0;right:0;height:3px;z-index:45;background:linear-gradient(90deg,var(--aurora),var(--gold) 65%,var(--mars));transform:scaleX(0);transform-origin:left;display:none;pointer-events:none}
+#hudMini{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));z-index:30;font:600 10px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--dim);background:var(--glass);border:1px solid var(--hair);padding:.5rem .9rem;border-radius:999px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;pointer-events:none;white-space:nowrap}
+@media (max-width:900px),(max-height:560px){#topbar,#hudMini{display:block}}
 @media (prefers-reduced-motion:reduce){#hud .sig::before{animation:none}}
 
 /* ---------- shared section chrome ---------- */
@@ -266,17 +272,14 @@ footer b{color:var(--dim)}
 @media (prefers-reduced-motion:reduce){#lb img{animation:none}}
 @media (prefers-reduced-motion:reduce){.frame img,.pillar,.btn,.rail i{transition:none}}
 @supports not (-webkit-background-clip:text){.launch .row.ice,.flagline{background:none;color:var(--ink)}}
-</style>
-<noscript><style>.rv{opacity:1;transform:none}</style></noscript>
 
-<!-- ===== SCENE GRAFT (central, 24/08, Jared's word "idm the canvas id=scene") =====
-     Earth-limb + streak-stars + gold satellite, scoped to #pad (LAUNCH PAD) and
-     tuned to the ascent palette. Port into the template build to survive regen. -->
-<style id="scene-graft-css">
+/* scene graft (central 24/08, Jared-approved "idm the canvas") — Earth-limb
+   orbit canvas in the LAUNCH PAD hero; script near the end of body */
 #scene{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 #pad{overflow:hidden;isolation:isolate}
 #pad .shell{position:relative;z-index:1}
 </style>
+<noscript><style>.rv{opacity:1;transform:none}</style></noscript>
 </head>
 <body>
 
@@ -604,6 +607,9 @@ footer b{color:var(--dim)}
 
 <div id="lb" hidden><span class="x">✕</span><img alt=""></div>
 
+<div id="topbar" aria-hidden="true"></div>
+<div id="hudMini" aria-hidden="true">Launch pad</div>
+
 <div id="hud" aria-hidden="true">
   <div class="sig">XS·SIM TELEMETRY</div>
   <div>PHASE <b id="hudPhase">LAUNCH PAD</b></div>
@@ -660,7 +666,9 @@ footer b{color:var(--dim)}
   var railFill=document.getElementById("railFill"),
       hudT=document.getElementById("hudT"),
       hudPhase=document.getElementById("hudPhase"),
-      hudAlt=document.getElementById("hudAlt");
+      hudAlt=document.getElementById("hudAlt"),
+      topbar=document.getElementById("topbar"),
+      hudMini=document.getElementById("hudMini");
   var ticking=false;
   function onScroll(){
     if(ticking)return;ticking=true;
@@ -669,6 +677,7 @@ footer b{color:var(--dim)}
       var max=document.documentElement.scrollHeight-innerHeight;
       var p=max>0?sc/max:0;
       railFill.style.transform="scaleY("+p+")";
+      if(topbar)topbar.style.transform="scaleX("+p+")";
       hudT.textContent=("00"+Math.round(p*100)).slice(-3);
       ticking=false;
     });
@@ -682,6 +691,7 @@ footer b{color:var(--dim)}
         if(e.isIntersecting){
           hudPhase.textContent=e.target.getAttribute("data-phase");
           hudAlt.textContent=e.target.getAttribute("data-alt");
+          if(hudMini)hudMini.textContent=e.target.getAttribute("data-phase")+" · "+e.target.getAttribute("data-alt");
         }
       });
     },{rootMargin:"-42% 0px -42% 0px"});
@@ -731,8 +741,9 @@ footer b{color:var(--dim)}
 </script>
 
 <script id="scene-graft-js">
-/* SCENE GRAFT — see scene-graft css note above. Deterministic; still frame under
-   reduced-motion or ?noreveal; self-heals on resize. */
+/* SCENE GRAFT (central 24/08, ported into the template so rebuilds keep it).
+   Earth-limb + streak-stars + gold satellite in the LAUNCH PAD hero.
+   Deterministic; still frame under reduced-motion or ?noreveal; self-heals. */
 (function(){
   var pad=document.getElementById('pad');if(!pad)return;
   var c=document.createElement('canvas');c.id='scene';c.setAttribute('aria-hidden','true');
@@ -788,6 +799,5 @@ footer b{color:var(--dim)}
   if(SG_RED)frame(0);else requestAnimationFrame(frame);
 })();
 </script>
-
 </body>
 </html>
