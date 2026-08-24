@@ -259,9 +259,131 @@ footer b{color:var(--muted);font-weight:500}
 .no-js .rv{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.js .rv{opacity:1;transform:none;transition:none}}
 </style>
+<style id="v3-interactive">
+/* ═══════════════════════════════════════════════════════════════════════════
+   v3 INTERACTIVE LAYER — "juiced tf up with elements, interactive and wow
+   factor", on top of v2's foundation.
+
+   Jared, 24/08: "i just wish u could pump out 1 site that is juiced tf up with
+   elements, interactive and wow factor wow wowowowoowow. foundational site we
+   build strong sets us up for futgure success."
+
+   v2 got the REGISTER right (product-grade, Linear/Leap reference class) and was
+   deliberately restrained. This layer keeps that register and loads it up. The
+   rule that stops it becoming gimmick soup: every effect is attached to real
+   content and does real work. Nothing here is motion for its own sake.
+
+   Everything degrades: no JS -> static and readable; reduced motion -> no
+   movement, all content shown; offscreen -> paused.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── scroll progress: a hairline that fills across the top ───────────────── */
+#prog{position:fixed;top:0;left:0;height:2px;width:100%;transform-origin:0 50%;transform:scaleX(0);
+  background:linear-gradient(90deg,var(--accent),var(--accent-2) 55%,var(--accent-3));
+  z-index:60;pointer-events:none;will-change:transform}
+.no-js #prog{display:none}
+
+/* ── section index: sticky dots down the right edge ─────────────────────── */
+#idx{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:40;
+  display:grid;gap:12px;pointer-events:auto}
+#idx a{display:block;width:8px;height:8px;border-radius:50%;background:var(--s-3);
+  border:1px solid var(--edge);transition:background .25s,transform .25s,border-color .25s;position:relative}
+#idx a:hover{transform:scale(1.35);border-color:var(--edge-2)}
+#idx a[aria-current=true]{background:var(--accent);border-color:var(--accent);box-shadow:0 0 10px rgba(124,201,245,.6)}
+#idx a span{position:absolute;right:16px;top:50%;transform:translateY(-50%) translateX(6px);
+  white-space:nowrap;font:400 11px/1 var(--mono);color:var(--muted);background:rgba(8,9,10,.88);
+  border:1px solid var(--edge);border-radius:6px;padding:5px 8px;opacity:0;pointer-events:none;
+  transition:opacity .2s,transform .2s}
+#idx a:hover span{opacity:1;transform:translateY(-50%) translateX(0)}
+.no-js #idx{display:none}
+@media (max-width:900px){#idx{display:none}}
+
+/* ── cursor spotlight: the single cheapest "expensive" effect there is ────
+   A radial highlight that follows the pointer INSIDE each surface. Only paints
+   on fine pointers; touch devices get the plain card. */
+@media (hover:hover) and (pointer:fine){
+  .card,.panel,.phase,.row,.seg-panel,.join,.console{position:relative}
+  .card::before,.panel::before,.phase::before,.seg-panel::before,.join::before{
+    content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),
+      rgba(124,201,245,.10),transparent 42%);
+    opacity:0;transition:opacity .3s;z-index:0;
+  }
+  .card:hover::before,.panel:hover::before,.phase:hover::before,
+  .seg-panel:hover::before,.join:hover::before{opacity:1}
+  .card>*,.panel>*,.phase>*,.seg-panel>*,.join>*{position:relative;z-index:1}
+}
+
+/* ── magnetic primary CTA ───────────────────────────────────────────────── */
+.btn-p{will-change:transform}
+@media (prefers-reduced-motion:reduce){.btn-p{will-change:auto;transform:none!important}}
+
+/* ── animated counters ──────────────────────────────────────────────────── */
+.stat .v{font-variant-numeric:tabular-nums}
+
+/* ── ticker: real programme names, nothing invented ─────────────────────── */
+.ticker{border-block:1px solid var(--edge);background:var(--s-1);overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.ticker-track{display:flex;gap:0;width:max-content;animation:tick 46s linear infinite}
+.ticker span{font:400 12.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);padding:14px 26px;white-space:nowrap;position:relative}
+.ticker span::after{content:"";position:absolute;right:0;top:50%;transform:translateY(-50%);
+  width:3px;height:3px;border-radius:50%;background:var(--accent);opacity:.5}
+@keyframes tick{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.ticker-track{animation:none}}
+.ticker:hover .ticker-track{animation-play-state:paused}
+
+/* ── trajectory: a rail that draws itself as you scroll ─────────────────── */
+.traj{position:relative;margin-top:clamp(28px,4vw,44px);padding-left:34px}
+.traj::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--edge)}
+.traj-fill{position:absolute;left:9px;top:6px;width:2px;height:0;border-radius:2px;
+  background:linear-gradient(180deg,var(--accent),var(--accent-3));
+  box-shadow:0 0 12px rgba(124,201,245,.5);will-change:height}
+.no-js .traj-fill{display:none}
+.traj .phase{margin-bottom:16px}
+.traj .phase::after{content:"";position:absolute;left:-34px;top:26px;width:20px;height:20px;
+  border-radius:50%;background:var(--bg);border:2px solid var(--edge);
+  transition:border-color .35s,box-shadow .35s,background .35s}
+.traj .phase.lit::after{border-color:var(--accent-3);background:rgba(94,234,212,.16);
+  box-shadow:0 0 0 4px rgba(94,234,212,.08),0 0 16px rgba(94,234,212,.35)}
+@media (max-width:640px){.traj{padding-left:26px}.traj::before,.traj-fill{left:5px}
+  .traj .phase::after{left:-26px;width:14px;height:14px;top:22px}}
+
+/* ── interactive ecosystem graph ────────────────────────────────────────── */
+.graph{display:grid;grid-template-columns:1.05fr .95fr;gap:0;margin-top:clamp(24px,3.4vw,36px);
+  border:1px solid var(--edge);border-radius:var(--r);overflow:hidden;background:var(--s-1)}
+@media (max-width:880px){.graph{grid-template-columns:1fr}}
+.graph-vis{position:relative;min-height:340px;border-right:1px solid var(--edge)}
+@media (max-width:880px){.graph-vis{border-right:0;border-bottom:1px solid var(--edge);min-height:300px}}
+#eco{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair}
+.graph-side{padding:clamp(18px,2.4vw,26px);display:flex;flex-direction:column;gap:12px}
+.graph-side .lab{font:400 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.graph-side h3{font-size:clamp(17px,2vw,21px);font-weight:600;letter-spacing:-.016em}
+.graph-side p{color:var(--muted);font-size:14.5px;line-height:1.62}
+.graph-hint{margin-top:auto;font:400 11.5px/1.5 var(--mono);color:var(--dim)}
+.no-js .graph-vis{display:none}
+.no-js .graph{grid-template-columns:1fr}
+
+/* ── reveal: a mask wipe rather than a fade, for the big headings ───────── */
+.js .wipe{clip-path:inset(0 100% 0 0);transition:clip-path .9s cubic-bezier(.16,1,.3,1)}
+.js .wipe.in{clip-path:inset(0 0 0 0)}
+.no-js .wipe{clip-path:none}
+@media (prefers-reduced-motion:reduce){.js .wipe{clip-path:none;transition:none}}
+
+</style>
 </head>
 <body class="no-js">
 <a class="skip" href="#vision">Skip to content</a>
+<div id="prog" aria-hidden="true"></div>
+<nav id="idx" aria-label="Section index">
+  <a href="#vision" aria-label="Vision"><span>Vision</span></a>
+  <a href="#pillars" aria-label="Pillars"><span>Pillars</span></a>
+  <a href="#ecosystem" aria-label="Ecosystem"><span>Ecosystem</span></a>
+  <a href="#city" aria-label="Space City"><span>Space City</span></a>
+  <a href="#gateway" aria-label="Welcome Center"><span>Welcome Center</span></a>
+  <a href="#join" aria-label="Contact"><span>Contact</span></a>
+</nav>
 
 <header>
   <div class="shell nav">
@@ -284,6 +406,7 @@ footer b{color:var(--muted);font-weight:500}
 
   <div class="hero">
     <canvas id="mesh" aria-hidden="true"></canvas>
+      <canvas id="orbitfield" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;z-index:-1"></canvas>
     <div class="shell">
       <p class="eyebrow"><i></i>UAE • A future-ready space economy</p>
       <h1>Building the <span class="g">UAE Space Nation</span></h1>
@@ -323,16 +446,18 @@ footer b{color:var(--muted);font-weight:500}
 
   <div class="stats">
     <div class="shell">
-      <div class="stat"><div class="k">Legacy</div><div class="v a">40+ yrs</div><p>Legacy since 1974 early engagement with NASA, now a national space roadmap.</p></div>
+      <div class="stat"><div class="k">Legacy</div><div class="v a"><span data-count="40" data-final="40+ yrs">40+ yrs</span></div><p>Legacy since 1974 early engagement with NASA, now a national space roadmap.</p></div>
       <div class="stat"><div class="k">Horizon</div><div class="v">2030–2117</div><p>Coordinated milestones towards a sustainable space economy &amp; Mars city vision.</p></div>
-      <div class="stat"><div class="k">Framework</div><div class="v">4 Pillars</div><p>Community, Education, Industry, R&amp;D integrated into one ecosystem.</p></div>
+      <div class="stat"><div class="k">Framework</div><div class="v"><span data-count="4" data-final="4 Pillars">4 Pillars</span></div><p>Community, Education, Industry, R&amp;D integrated into one ecosystem.</p></div>
     </div>
   </div>
+
+  <div class="ticker" aria-hidden="true"><div class="ticker-track"><span>Hope Probe</span><span>Rashid Rover</span><span>Lunar Gateway contribution</span><span>Satellites</span><span>Asteroid &amp; deep-space ambitions</span><span>Food BIOME</span><span>Olympus</span><span>Eyes on Universe</span><span>Arkisys</span><span>MARS-2117</span><span>National Space Strategy 2030</span><span>Hope Probe</span><span>Rashid Rover</span><span>Lunar Gateway contribution</span><span>Satellites</span><span>Asteroid &amp; deep-space ambitions</span><span>Food BIOME</span><span>Olympus</span><span>Eyes on Universe</span><span>Arkisys</span><span>MARS-2117</span><span>National Space Strategy 2030</span></div></div>
 
   <section id="vision">
     <div class="shell">
       <p class="sec-k rv">The First Space Nation</p>
-      <h2 class="rv">UAE’s long-term vision for the future</h2>
+      <h2 class="rv wipe">UAE’s long-term vision for the future</h2>
       <p class="sec-sub rv">Guided by visionary leadership, the UAE is transitioning from a resourced based to a hiTech economy driven by the space program. Early achievements have helped form a structured, long-horizon strategy with advanced missions, strong governance, and a developing space sector. This strategy propels UAE towards leadership in Exploration, R&amp;D and Investment developing exciting opportunties for the global space economy.</p>
       <div class="grid-2">
         <div class="panel rv">
@@ -358,7 +483,7 @@ footer b{color:var(--muted);font-weight:500}
   <section id="pillars">
     <div class="shell">
       <p class="sec-k rv">Core Framework</p>
-      <h2 class="rv">4 Pillars powering XperienceSpace</h2>
+      <h2 class="rv wipe">4 Pillars powering XperienceSpace</h2>
       <p class="sec-sub rv">XperienceSpace initiative structures programs around four interdependent pillars. Each pillar channels community energy, builds capabilities, and supports UAE’s official space initiatives with practical, investment-ready mechanisms.</p>
       <div class="seg" role="tablist" aria-label="Pillars">
         <button role="tab" aria-selected="true" aria-controls="p-1" id="t-1">Public Engagement &amp; Community</button>
@@ -390,13 +515,23 @@ footer b{color:var(--muted);font-weight:500}
   <section id="ecosystem">
     <div class="shell">
       <p class="sec-k rv">Ecosystem in Action</p>
-      <h2 class="rv">Making the space vision investable, practical and inclusive</h2>
+      <h2 class="rv wipe">Making the space vision investable, practical and inclusive</h2>
       <p class="sec-sub rv">The XperienceSpace ecosystem connects community, academia, industry, investors and government stakeholders into one coherent platform designed to attract technology, talent and capital into the UAE.</p>
       <div class="rows rv">
         <div class="row"><b>UAE Space Community</b><span>A national movement where youth, families, professionals and creators participate in UAE space initiatives through digital platforms, outreach programs, events, challenges and learning pathways.</span></div>
         <div class="row"><b>UAE Space City</b><span>A scalable future-ready urban and economic zone housing R&amp;D centers, manufacturing clusters, training facilities and high-tech workplaces dedicated to space and sustainability.</span></div>
         <div class="row"><b>UAE Space Welcome Center</b><span>The iconic gateway at the heart of UAE Space City: immersive exhibits, simulations, labs, events and industry showcases linking the public to live missions.</span></div>
         <div class="row"><b>Future Development Funds</b><span>A series of hiTech funds channeling private and institutional capital into UAE-based solutions.</span></div>
+      </div>
+
+      <div class="graph rv">
+        <div class="graph-vis"><canvas id="eco" role="img" aria-label="Ecosystem diagram: four components connected to the platform layer"></canvas></div>
+        <div class="graph-side" id="eco-side">
+          <span class="lab">Ecosystem component</span>
+          <h3>UAE Space Community</h3>
+          <p>A national movement where youth, families, professionals and creators participate in UAE space initiatives through digital platforms, outreach programs, events, challenges and learning pathways.</p>
+          <p class="graph-hint">Select a node to read its role. The four components above are the same four listed in the table.</p>
+        </div>
       </div>
 
       <h2 class="rv" style="margin-top:clamp(40px,5vw,64px);font-size:clamp(22px,2.6vw,30px)">Strategic benefits to the UAE</h2>
@@ -413,10 +548,10 @@ footer b{color:var(--muted);font-weight:500}
   <section id="city">
     <div class="shell">
       <p class="sec-k rv">Strategic Trajectory</p>
-      <h2 class="rv">From programs to a fully functioning UAE Space City</h2>
+      <h2 class="rv wipe">From programs to a fully functioning UAE Space City</h2>
       <p class="sec-sub rv">A phased roadmap converts ambition into visible assets — supporting UAE initatives, de-risking investment and aligning ecosystem maturity with national milestones.</p>
       <p class="sec-sub rv">UAE Space City is a scalable, future-ready special economic zone developed as an industry and community focal point supporting the UAE vision for space. A smart city dedicated to innovation, education, enterprise and development of cutting-edge technologies, resources and investment in space and environment.</p>
-      <div class="cards">
+      <div class="traj"><div class="traj-fill" aria-hidden="true"></div><div class="cards">
         <div class="phase rv">
           <div class="yr">NOW–2030</div>
           <h3>Foundation &amp; Awareness</h3>
@@ -448,13 +583,13 @@ footer b{color:var(--muted);font-weight:500}
         <div class="row"><b>Programs:</b><span>Food BIOME, Olympus, Eyes on Universe, Arkisys, asteroid missions, local fabrication.</span></div>
         <div class="row"><b>Role of XperienceSpace:</b><span>coordinate, connect, promote, de-risk national programs &amp; initiatives.</span></div>
       </div>
-    </div>
+    </div></div>
   </section>
 
   <section id="gateway">
     <div class="shell">
       <p class="sec-k rv">Gateway to the Vision</p>
-      <h2 class="rv">UAE Space Welcome Center &amp; Community</h2>
+      <h2 class="rv wipe">UAE Space Welcome Center &amp; Community</h2>
       <p class="sec-sub rv">The UAE Space Welcome Center is the jewel of UAE Space City — a physical and virtual gateway where Emiratis, residents and visitors from across the globe experience the nation’s journey to space and discover how they can participate.</p>
       <div class="cards">
         <div class="card rv">
@@ -491,7 +626,7 @@ footer b{color:var(--muted);font-weight:500}
   <section id="join">
     <div class="shell">
       <p class="sec-k rv">Collaboration Network Model</p>
-      <h2 class="rv">Led by industry experts — aligned with national leadership</h2>
+      <h2 class="rv wipe">Led by industry experts — aligned with national leadership</h2>
       <p class="sec-sub rv">XperienceSpace unites passionate experts across business, technology, education, medicine, AI, sustainability, development and design sectors. The initiative complements UAE agencies by aggregating knowledge, technology, partners and opportunities into one unified ecosystem.</p>
       <div class="split">
         <div class="panel do rv">
@@ -686,6 +821,350 @@ document.body.classList.remove('no-js');document.body.classList.add('js');
     {rootMargin:'-45% 0px -50% 0px'});
   Object.keys(map).forEach(function(id){var el=document.getElementById(id);if(el)io2.observe(el)});
 })();
+</script>
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   v3 INTERACTIVE LAYER — behaviour.
+
+   ONE rAF loop drives every animation on the page. Separate loops per effect is
+   how a page like this ends up janky; a single scheduler with an offscreen check
+   keeps it cheap no matter how much gets added later. That is the "foundational
+   site we build strong" part — this scales.
+
+   Contract every effect honours:
+     · prefers-reduced-motion or ?noreveal  -> no movement, everything visible
+     · offscreen                            -> not drawn
+     · tab hidden                           -> loop stopped entirely
+     · no JS                                -> CSS already shows the static page
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  var STILL = /[?&]noreveal/.test(location.search);
+  var mq = matchMedia('(prefers-reduced-motion:reduce)');
+  var RED = mq.matches || STILL;
+  var FINE = matchMedia('(hover:hover) and (pointer:fine)').matches;
+
+  /* ── the single scheduler ─────────────────────────────────────────────── */
+  var tasks = [], raf = 0, last = 0;
+  function add(fn){ tasks.push(fn); }
+  function tick(t){
+    raf = requestAnimationFrame(tick);
+    if (t - last < 16) return;            /* never exceed ~60fps of work */
+    last = t;
+    for (var i = 0; i < tasks.length; i++) tasks[i](t);
+  }
+  function start(){ if (!raf) raf = requestAnimationFrame(tick); }
+  function stop(){ if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+  document.addEventListener('visibilitychange', function(){
+    if (document.hidden) stop(); else if (!RED) start();
+  });
+
+  function onScreen(el){
+    var r = el.getBoundingClientRect();
+    return r.bottom > -80 && r.top < (innerHeight || 0) + 80;
+  }
+
+  /* ── scroll progress ──────────────────────────────────────────────────── */
+  (function(){
+    var bar = document.getElementById('prog'); if (!bar) return;
+    var pending = false;
+    function paint(){
+      pending = false;
+      var de = document.documentElement;
+      var max = de.scrollHeight - innerHeight;
+      bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, scrollY / max) : 0) + ')';
+    }
+    addEventListener('scroll', function(){ if(!pending){pending=true;requestAnimationFrame(paint);} }, {passive:true});
+    addEventListener('resize', paint, {passive:true});
+    paint();
+  })();
+
+  /* ── cursor spotlight: writes --mx/--my on the hovered surface ────────── */
+  if (FINE) {
+    var SEL = '.card,.panel,.phase,.seg-panel,.join';
+    document.addEventListener('pointermove', function(e){
+      var el = e.target.closest && e.target.closest(SEL);
+      if (!el) return;
+      var r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    }, {passive:true});
+  }
+
+  /* ── magnetic primary CTA ─────────────────────────────────────────────── */
+  if (FINE && !RED) {
+    [].slice.call(document.querySelectorAll('.btn-p')).forEach(function(b){
+      b.addEventListener('pointermove', function(e){
+        var r = b.getBoundingClientRect();
+        var dx = (e.clientX - (r.left + r.width/2)) / r.width;
+        var dy = (e.clientY - (r.top + r.height/2)) / r.height;
+        b.style.transform = 'translate(' + (dx*7).toFixed(2) + 'px,' + (dy*5).toFixed(2) + 'px)';
+      });
+      b.addEventListener('pointerleave', function(){ b.style.transform = ''; });
+    });
+  }
+
+  /* ── animated counters ────────────────────────────────────────────────── */
+  (function(){
+    var els = [].slice.call(document.querySelectorAll('[data-count]'));
+    if (!els.length) return;
+    if (RED || !('IntersectionObserver' in window)) {
+      els.forEach(function(e){ e.textContent = e.getAttribute('data-final'); });
+      return;
+    }
+    var io = new IntersectionObserver(function(en){
+      en.forEach(function(entry){
+        if (!entry.isIntersecting) return;
+        var el = entry.target; io.unobserve(el);
+        var to = parseFloat(el.getAttribute('data-count'));
+        var pre = el.getAttribute('data-pre') || '';
+        var post = el.getAttribute('data-post') || '';
+        var t0 = performance.now(), dur = 1100;
+        function step(now){
+          var p = Math.min(1, (now - t0) / dur);
+          var e = 1 - Math.pow(1 - p, 3);          /* ease-out cubic */
+          el.textContent = pre + Math.round(to * e).toLocaleString() + post;
+          if (p < 1) requestAnimationFrame(step);
+          else el.textContent = el.getAttribute('data-final');
+        }
+        requestAnimationFrame(step);
+      });
+    }, {rootMargin:'0px 0px -12% 0px'});
+    els.forEach(function(e){ io.observe(e); });
+  })();
+
+  /* ── trajectory rail: draws with scroll, lights each phase ────────────── */
+  (function(){
+    var wrap = document.querySelector('.traj'); if (!wrap) return;
+    var fill = wrap.querySelector('.traj-fill');
+    var phases = [].slice.call(wrap.querySelectorAll('.phase'));
+    if (RED) { if (fill) fill.style.height = '100%'; phases.forEach(function(p){p.classList.add('lit')}); return; }
+    var pending = false;
+    function paint(){
+      pending = false;
+      var r = wrap.getBoundingClientRect();
+      var head = Math.min(Math.max(innerHeight * 0.62 - r.top, 0), r.height);
+      if (fill) fill.style.height = head + 'px';
+      phases.forEach(function(p){
+        var pr = p.getBoundingClientRect();
+        p.classList.toggle('lit', (pr.top - r.top + 28) <= head);
+      });
+    }
+    addEventListener('scroll', function(){ if(!pending){pending=true;requestAnimationFrame(paint);} }, {passive:true});
+    addEventListener('resize', paint, {passive:true});
+    paint(); setTimeout(paint, 400);
+  })();
+
+  /* ── section index dots ───────────────────────────────────────────────── */
+  (function(){
+    var idx = document.getElementById('idx'); if (!idx || !('IntersectionObserver' in window)) return;
+    var links = [].slice.call(idx.querySelectorAll('a'));
+    var map = {};
+    links.forEach(function(a){ var el = document.querySelector(a.getAttribute('href')); if (el) map[el.id] = a; });
+    var io = new IntersectionObserver(function(en){
+      en.forEach(function(e){
+        if (!e.isIntersecting) return;
+        links.forEach(function(a){ a.removeAttribute('aria-current'); });
+        if (map[e.target.id]) map[e.target.id].setAttribute('aria-current','true');
+      });
+    }, {rootMargin:'-45% 0px -50% 0px'});
+    Object.keys(map).forEach(function(id){ var el = document.getElementById(id); if (el) io.observe(el); });
+  })();
+
+  /* ── HERO: an orbital system with real depth ──────────────────────────── */
+  (function(){
+    var c = document.getElementById('orbitfield'); if (!c || !c.getContext) return;
+    var x = c.getContext('2d'), W=0, H=0, S=1, px=0, py=0, tx=0, ty=0, stars=[];
+    function rng(s){ return function(){ s=(s*1664525+1013904223)>>>0; return s/4294967296; }; }
+    function size(){
+      S = Math.min(devicePixelRatio||1, 2);
+      var w = Math.max(1, Math.round(c.offsetWidth*S)), h = Math.max(1, Math.round(c.offsetHeight*S));
+      if (w===W && h===H) return false;
+      W=c.width=w; H=c.height=h;
+      var r = rng(20260824); stars = [];
+      for (var i=0;i<Math.min(190, W/7);i++) stars.push({x:r()*W, y:r()*H, z:.25+r()*.75, ph:r()*6.28});
+      return true;
+    }
+    /* satellites on three inclined rings; z decides size, alpha and draw order */
+    var SATS = (function(){
+      var r = rng(97531), out = [];
+      for (var ring=0; ring<3; ring++){
+        var n = 3 + ring;
+        for (var i=0;i<n;i++){
+          out.push({ring:ring, a:r()*6.2832, sp:(0.00013 + ring*0.00004)*(ring%2?-1:1), w:1});
+        }
+      }
+      return out;
+    })();
+    var RINGS = [
+      {rx:0.40, ry:0.115, tilt:-0.20, col:'124,201,245'},
+      {rx:0.52, ry:0.150, tilt: 0.12, col:'167,139,250'},
+      {rx:0.64, ry:0.185, tilt:-0.06, col:'94,234,212'}
+    ];
+
+    if (FINE && !RED) {
+      addEventListener('pointermove', function(e){
+        tx = (e.clientX/innerWidth - .5); ty = (e.clientY/innerHeight - .5);
+      }, {passive:true});
+    }
+
+    function draw(t){
+      if (!onScreen(c)) return;
+      px += (tx - px) * 0.05; py += (ty - py) * 0.05;
+      x.clearRect(0,0,W,H);
+      var cx = W*0.5 + px*26*S, cy = H*0.56 + py*16*S, R = Math.min(W, H*1.5);
+
+      for (var i=0;i<stars.length;i++){
+        var s = stars[i];
+        x.globalAlpha = (RED?.45:.28+.34*Math.abs(Math.sin(t/2400+s.ph))) * s.z;
+        x.fillStyle = '#CFE3FF';
+        x.fillRect(s.x + px*10*s.z*S, s.y + py*7*s.z*S, 1.4*s.z*S, 1.4*s.z*S);
+      }
+      x.globalAlpha = 1;
+
+      /* the planet limb: an arc, lit from upper-left */
+      var pr = R*0.46, pcy = cy + pr*0.92;
+      var lg = x.createRadialGradient(cx - pr*0.4, pcy - pr*0.55, 0, cx, pcy, pr);
+      lg.addColorStop(0, 'rgba(124,201,245,.30)');
+      lg.addColorStop(.55, 'rgba(30,58,90,.55)');
+      lg.addColorStop(1, 'rgba(8,9,10,.95)');
+      x.beginPath(); x.arc(cx, pcy, pr, 0, 6.2832); x.fillStyle = lg; x.fill();
+      x.beginPath(); x.arc(cx, pcy, pr, Math.PI*1.06, Math.PI*1.94);
+      x.strokeStyle = 'rgba(150,215,255,.55)'; x.lineWidth = 1.4*S; x.stroke();
+
+      /* rings + satellites, painted back half then front half */
+      function ringPath(rr){
+        x.save(); x.translate(cx, cy); x.rotate(rr.tilt);
+        x.beginPath(); x.ellipse(0, 0, R*rr.rx, R*rr.ry, 0, 0, 6.2832);
+        x.strokeStyle = 'rgba(' + rr.col + ',.20)'; x.lineWidth = 1*S; x.stroke();
+        x.restore();
+      }
+      RINGS.forEach(ringPath);
+
+      var pts = [];
+      for (var k=0;k<SATS.length;k++){
+        var st = SATS[k], rr = RINGS[st.ring];
+        var a = st.a + (RED?0:t*st.sp);
+        var ex = Math.cos(a)*R*rr.rx, ey = Math.sin(a)*R*rr.ry;
+        var sx = cx + ex*Math.cos(rr.tilt) - ey*Math.sin(rr.tilt);
+        var sy = cy + ex*Math.sin(rr.tilt) + ey*Math.cos(rr.tilt);
+        pts.push({x:sx, y:sy, z:Math.sin(a), col:rr.col});
+      }
+      pts.sort(function(a,b){ return a.z - b.z; });
+      for (var p=0;p<pts.length;p++){
+        var s2 = pts[p], depth = (s2.z+1)/2, rad = (1.6 + depth*2.4)*S;
+        var g2 = x.createRadialGradient(s2.x, s2.y, 0, s2.x, s2.y, rad*5);
+        g2.addColorStop(0, 'rgba(' + s2.col + ',' + (.28+depth*.34) + ')');
+        g2.addColorStop(1, 'rgba(' + s2.col + ',0)');
+        x.fillStyle = g2; x.fillRect(s2.x-rad*5, s2.y-rad*5, rad*10, rad*10);
+        x.beginPath(); x.arc(s2.x, s2.y, rad, 0, 6.2832);
+        x.fillStyle = 'rgba(' + s2.col + ',' + (.55+depth*.45) + ')'; x.fill();
+      }
+    }
+
+    var settle;
+    function onResize(){ clearTimeout(settle); settle = setTimeout(function(){ if (size()||RED) draw(0); }, 140); }
+    size();
+    if (RED) draw(0); else { add(draw); start(); }
+    addEventListener('resize', onResize, {passive:true});
+  })();
+
+  /* ── ECOSYSTEM GRAPH: hover/click a node, the panel follows ───────────── */
+  (function(){
+    var c = document.getElementById('eco'); if (!c || !c.getContext) return;
+    var side = document.getElementById('eco-side'); if (!side) return;
+    var x = c.getContext('2d'), W=0, H=0, S=1, hot=-1, sel=0;
+
+    /* every string here is already on the page — the graph presents the same
+       four ecosystem rows, it does not introduce new claims */
+    var N = [].slice.call(document.querySelectorAll('#ecosystem .rows .row')).map(function(r){
+      return { name: r.querySelector('b').textContent.trim().replace(/:$/,''),
+               body: r.querySelector('span').textContent.trim() };
+    }).slice(0,4);
+    if (!N.length) return;
+
+    function size(){
+      S = Math.min(devicePixelRatio||1,2);
+      var w = Math.max(1, Math.round(c.offsetWidth*S)), h = Math.max(1, Math.round(c.offsetHeight*S));
+      if (w===W && h===H) return false; W=c.width=w; H=c.height=h; return true;
+    }
+    function nodePos(i){
+      var cx=W/2, cy=H/2, R=Math.min(W,H)*0.30;
+      var a = -Math.PI/2 + i*(6.2832/N.length);
+      return {x:cx+Math.cos(a)*R, y:cy+Math.sin(a)*R, cx:cx, cy:cy};
+    }
+    function paint(t){
+      if (!onScreen(c)) return;
+      x.clearRect(0,0,W,H);
+      var cx=W/2, cy=H/2, R=Math.min(W,H)*0.30;
+      /* rings */
+      x.strokeStyle='rgba(255,255,255,.06)'; x.lineWidth=1*S;
+      for (var k=1;k<=3;k++){ x.beginPath(); x.arc(cx,cy,R*(0.34+k*0.26),0,6.2832); x.stroke(); }
+      /* spokes */
+      for (var i=0;i<N.length;i++){
+        var p = nodePos(i), on = (i===sel||i===hot);
+        x.strokeStyle = on ? 'rgba(124,201,245,.55)' : 'rgba(255,255,255,.10)';
+        x.lineWidth = on ? 1.6*S : 1*S;
+        x.setLineDash(on?[]:[3*S,4*S]);
+        x.beginPath(); x.moveTo(cx,cy); x.lineTo(p.x,p.y); x.stroke(); x.setLineDash([]);
+      }
+      /* hub */
+      x.beginPath(); x.arc(cx,cy,R*0.30,0,6.2832);
+      x.fillStyle='rgba(124,201,245,.10)'; x.fill();
+      x.strokeStyle='rgba(124,201,245,.5)'; x.lineWidth=1*S; x.stroke();
+      x.fillStyle='rgba(247,248,248,.85)'; x.textAlign='center'; x.textBaseline='middle';
+      x.font='500 '+(9.5*S)+'px "IBM Plex Mono",monospace';
+      x.fillText('PLATFORM', cx, cy-5*S); x.fillText('LAYER', cx, cy+6*S);
+      /* nodes */
+      for (var j=0;j<N.length;j++){
+        var q = nodePos(j), act = (j===sel), hov = (j===hot);
+        var pulse = RED?1:(act?1+0.06*Math.sin(t/620):1);
+        var rad = (act?7:5)*S*pulse;
+        var g = x.createRadialGradient(q.x,q.y,0,q.x,q.y,rad*4.5);
+        g.addColorStop(0,'rgba(94,234,212,'+(act?.55:hov?.38:.22)+')');
+        g.addColorStop(1,'rgba(94,234,212,0)');
+        x.fillStyle=g; x.fillRect(q.x-rad*4.5,q.y-rad*4.5,rad*9,rad*9);
+        x.beginPath(); x.arc(q.x,q.y,rad,0,6.2832);
+        x.fillStyle = act?'#5EEAD4':(hov?'rgba(94,234,212,.85)':'rgba(94,234,212,.55)'); x.fill();
+        x.fillStyle = act?'rgba(247,248,248,.95)':'rgba(247,248,248,.6)';
+        x.font = (act?'500 ':'400 ')+(9*S)+'px "IBM Plex Mono",monospace';
+        var lbl = N[j].name.toUpperCase();
+        var ly = q.y + (q.y < H/2 ? -rad-9*S : rad+13*S);
+        x.fillText(lbl.length>22?lbl.slice(0,21)+'…':lbl, q.x, ly);
+      }
+    }
+    function show(i){
+      sel = i;
+      side.querySelector('h3').textContent = N[i].name;
+      side.querySelector('p').textContent = N[i].body;
+    }
+    function pick(e){
+      var r = c.getBoundingClientRect();
+      var mx = (e.clientX-r.left)*S, my = (e.clientY-r.top)*S, best=-1, bd=28*S;
+      for (var i=0;i<N.length;i++){
+        var p = nodePos(i), d = Math.hypot(p.x-mx, p.y-my);
+        if (d < bd) { bd = d; best = i; }
+      }
+      return best;
+    }
+    c.addEventListener('pointermove', function(e){
+      var i = pick(e); hot = i; c.style.cursor = i>=0 ? 'pointer' : 'crosshair';
+      if (RED) paint(0);
+    }, {passive:true});
+    c.addEventListener('pointerleave', function(){ hot=-1; if(RED) paint(0); }, {passive:true});
+    c.addEventListener('click', function(e){ var i=pick(e); if(i>=0) { show(i); if(RED) paint(0); } });
+
+    var settle;
+    addEventListener('resize', function(){ clearTimeout(settle); settle=setTimeout(function(){ if(size()||RED) paint(0); },140); }, {passive:true});
+    size(); show(0);
+    if (RED) paint(0); else { add(paint); start(); }
+  })();
+
+  if (mq.addEventListener) mq.addEventListener('change', function(e){
+    RED = e.matches || STILL; if (RED) stop(); else start();
+  });
+})();
+
 </script>
 </body>
 </html>
