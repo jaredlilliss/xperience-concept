@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -695,9 +695,9 @@ document.body.classList.remove('no-js');document.body.classList.add('js');
       STILL=/[?&]noreveal/.test(location.search),
       mq=matchMedia('(prefers-reduced-motion:reduce)'),RED=mq.matches||STILL;
   var BLOBS=[
-    {h:'124,201,245',ox:.22,oy:.18,r:.62,sx:.00021,sy:.00013,a:.34},
-    {h:'167,139,250',ox:.72,oy:.10,r:.55,sx:.00017,sy:.00023,a:.28},
-    {h:'94,234,212',ox:.52,oy:.42,r:.48,sx:.00025,sy:.00016,a:.20}
+    {h:'124,201,245',ox:.18,oy:.16,r:.66,sx:.00021,sy:.00013,a:.20},
+    {h:'167,139,250',ox:.70,oy:.08,r:.60,sx:.00017,sy:.00023,a:.16},
+    {h:'94,234,212',ox:.46,oy:.44,r:.52,sx:.00025,sy:.00016,a:.11}
   ];
   function size(){
     var w=Math.max(1,Math.round(c.offsetWidth/3)),h=Math.max(1,Math.round(c.offsetHeight/3));
@@ -997,9 +997,9 @@ document.body.classList.remove('no-js');document.body.classList.add('js');
       return out;
     })();
     var RINGS = [
-      {rx:0.40, ry:0.115, tilt:-0.20, col:'124,201,245'},
-      {rx:0.52, ry:0.150, tilt: 0.12, col:'167,139,250'},
-      {rx:0.64, ry:0.185, tilt:-0.06, col:'94,234,212'}
+      {rx:0.26, ry:0.075, tilt:-0.22, col:'124,201,245'},
+      {rx:0.34, ry:0.098, tilt: 0.14, col:'167,139,250'},
+      {rx:0.43, ry:0.124, tilt:-0.05, col:'94,234,212'}
     ];
 
     if (FINE && !RED) {
@@ -1012,7 +1012,9 @@ document.body.classList.remove('no-js');document.body.classList.add('js');
       if (!onScreen(c)) return;
       px += (tx - px) * 0.05; py += (ty - py) * 0.05;
       x.clearRect(0,0,W,H);
-      var cx = W*0.5 + px*26*S, cy = H*0.56 + py*16*S, R = Math.min(W, H*1.5);
+      /* upper-right, clear of the headline on the left and the console below.
+         The previous centre put the planet directly behind an opaque panel. */
+      var cx = W*0.79 + px*30*S, cy = H*0.30 + py*18*S, R = Math.min(W, H*1.5);
 
       for (var i=0;i<stars.length;i++){
         var s = stars[i];
@@ -1022,15 +1024,23 @@ document.body.classList.remove('no-js');document.body.classList.add('js');
       }
       x.globalAlpha = 1;
 
-      /* the planet limb: an arc, lit from upper-left */
-      var pr = R*0.46, pcy = cy + pr*0.92;
-      var lg = x.createRadialGradient(cx - pr*0.4, pcy - pr*0.55, 0, cx, pcy, pr);
-      lg.addColorStop(0, 'rgba(124,201,245,.30)');
-      lg.addColorStop(.55, 'rgba(30,58,90,.55)');
-      lg.addColorStop(1, 'rgba(8,9,10,.95)');
+      /* the planet: a sphere lit from the upper left, with a bright terminator
+         rim. Sized to sit inside the hero rather than run under the console. */
+      var pr = Math.min(W, H) * 0.30, pcy = cy;
+      var lg = x.createRadialGradient(cx - pr*0.45, pcy - pr*0.5, pr*0.05, cx, pcy, pr);
+      lg.addColorStop(0,  'rgba(150,215,255,.42)');
+      lg.addColorStop(.42,'rgba(46,86,130,.42)');
+      lg.addColorStop(.82,'rgba(14,24,40,.72)');
+      lg.addColorStop(1,  'rgba(8,9,10,.88)');
       x.beginPath(); x.arc(cx, pcy, pr, 0, 6.2832); x.fillStyle = lg; x.fill();
-      x.beginPath(); x.arc(cx, pcy, pr, Math.PI*1.06, Math.PI*1.94);
-      x.strokeStyle = 'rgba(150,215,255,.55)'; x.lineWidth = 1.4*S; x.stroke();
+      /* rim light on the lit side only */
+      x.beginPath(); x.arc(cx, pcy, pr, Math.PI*0.72, Math.PI*1.62);
+      x.strokeStyle = 'rgba(178,228,255,.72)'; x.lineWidth = 1.6*S; x.stroke();
+      /* atmosphere bloom */
+      var ag = x.createRadialGradient(cx, pcy, pr*0.92, cx, pcy, pr*1.35);
+      ag.addColorStop(0, 'rgba(124,201,245,.18)');
+      ag.addColorStop(1, 'rgba(124,201,245,0)');
+      x.fillStyle = ag; x.fillRect(cx-pr*1.4, pcy-pr*1.4, pr*2.8, pr*2.8);
 
       /* rings + satellites, painted back half then front half */
       function ringPath(rr){
