@@ -371,6 +371,29 @@ footer b{color:var(--muted);font-weight:500}
 .no-js .wipe{clip-path:none}
 @media (prefers-reduced-motion:reduce){.js .wipe{clip-path:none;transition:none}}
 
+/* ── the console compacts on phones ──────────────────────────────────────────
+   Measured: the hero is 2.33 screens at 375px, and 552px of that is the console.
+   Its canvas shrinks to a 240px smudge on a phone and the spec list restates
+   what the page already says in prose. On narrow screens the canvas goes and the
+   spec list becomes a tight two-column strip — the values all survive, the
+   furniture does not. Desktop is untouched. */
+@media (max-width:640px){
+  .console-vis{display:none}
+  .console-body{grid-template-columns:1fr}
+  .console-side{padding:12px 14px}
+  .kv{padding:9px 2px;gap:10px}
+  .kv dt{font-size:11px}
+  .kv dd{font-size:12.5px}
+  .kv dd br{display:none}
+  /* and give the hero itself less air, since it has plenty of content */
+  .hero{padding-top:clamp(36px,7vw,56px)}
+  .pills{gap:6px;margin-top:20px}
+  .pill{font-size:11.5px;padding:7px 11px}
+  .aud-body{padding:14px}
+  .aud-head{padding:12px 14px}
+  .aud-head .hint{display:none}
+}
+
 </style>
 <style id="v4-audience">
 /* ═══════════════════════════════════════════════════════════════════════════
