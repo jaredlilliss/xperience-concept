@@ -19,6 +19,10 @@
   --aurora:#8FE3FF; --aurora-deep:#3AA0D8; --gold:#E9BC6A; --mars:#E0714A; --mars-deep:#8C2F14;
   --hair:rgba(143,227,255,.15); --hair-2:rgba(143,227,255,.32);
   --glass:rgba(10,18,36,.55);
+  /* the Mars closer: tokenised 24/08 so every rendition steers it. These were
+     hardcoded rgba and ignored the theme entirely. */
+  --close-wash:rgba(224,113,74,.5); --close-wash-2:rgba(140,47,20,.22);
+  --close-year:var(--mars);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;overflow-x:clip}
@@ -269,15 +273,21 @@ h1.launch .row.ice{background:linear-gradient(95deg,#FFFFFF 12%,#B9E7FF 55%,#5FB
 .twins .not li::before{content:"✕";color:var(--mars);font-size:.8em;top:.2em}
 
 /* Mars closer */
-#mars{min-height:88vh;min-height:88svh;display:grid;place-items:center;text-align:center;position:relative;padding-block:clamp(5rem,14vh,9rem);overflow-x:clip}
-#mars::before{content:"";position:absolute;left:50%;bottom:-42vh;transform:translateX(-50%);width:160vw;height:80vh;border-radius:50% 50% 0 0;
-  background:radial-gradient(55% 90% at 50% 100%,rgba(224,113,74,.5),rgba(140,47,20,.22) 55%,transparent 78%);pointer-events:none}
-#mars .yr{font:700 clamp(7rem,26vw,21rem)/0.85 var(--mono);letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1.5px rgba(224,113,74,.55);display:block}
+#mars{min-height:52vh;min-height:52svh;display:grid;place-items:center;text-align:center;position:relative;padding-block:clamp(3.5rem,9vh,6rem);overflow:clip}
+#mars::before{content:"";position:absolute;left:50%;bottom:-20vh;transform:translateX(-50%);width:150vw;height:52vh;border-radius:50% 50% 0 0;
+  background:radial-gradient(55% 90% at 50% 100%,var(--close-wash),var(--close-wash-2) 55%,transparent 78%);pointer-events:none}
+/* Was a 21rem outlined ghost numeral — the one survivor of the de-numbering
+   pass, which is why it read as orphaned. It is a real date in the copy
+   (MARS-2117), so it stays as a legible figure rather than a monument. */
+#mars .yr{font:600 clamp(2.6rem,8vw,5.4rem)/1 var(--mono);letter-spacing:.02em;color:var(--close-year);display:block;opacity:.9}
 #mars .cap{font:600 12.5px/1 var(--mono);letter-spacing:.4em;text-transform:uppercase;color:var(--mars);margin-top:1.6rem}
 #mars .quote{max-width:46ch;margin:1.8rem auto 0;color:var(--dim);font-size:clamp(1rem,2.2vw,1.15rem)}
 
 /* footer */
-footer{border-top:1px solid var(--hair);padding:2.2rem 0 max(2.2rem,env(safe-area-inset-bottom));font:500 12px/1.9 var(--mono);color:var(--faint)}
+/* The telemetry chip is position:fixed at the bottom-left, so at the end of the
+   page it lands ON TOP of the footer's legal text. Reserve height for it rather
+   than hiding the chip, which is part of the page's character. */
+footer{border-top:1px solid var(--hair);padding:2.2rem 0 max(7rem,calc(env(safe-area-inset-bottom) + 6rem));font:500 12px/1.9 var(--mono);color:var(--faint)}
 footer .shell{display:flex;flex-direction:column;gap:.4rem}
 footer b{color:var(--dim)}
 
