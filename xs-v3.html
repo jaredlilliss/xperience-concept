@@ -472,6 +472,63 @@ body[data-aud] section[data-key].relevant > .shell > .sec-k::after{
 .no-js .aud{display:none}
 
 </style>
+<style id="v5-numbers">
+/* ═══════════════════════════════════════════════════════════════════════════
+   v5 LIVE NUMBERS — "more interactive numbers like the 40+ years thing".
+
+   THE CONSTRAINT THAT SHAPES ALL OF THIS: no invented figures, no percentages.
+   This page's whole history is deleting fabricated data, so a made-up statistic
+   here would undo the point of the exercise. Every number below is either
+   ALREADY STATED on the page (1974, 2030, 2040, 2117, four pillars) or is plain
+   ARITHMETIC on those stated years against today's date. Nothing is sourced from
+   anywhere else, and nothing is a claim about performance.
+
+   What that buys, and it is better than a fabricated stat would have been: these
+   numbers are LIVE. The horizon countdown is different every day the page is
+   opened. A roadmap that says "2117" is abstract; one that says "91 years from
+   today" is not.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── the horizon counter: the page's biggest number, made concrete ───────── */
+.horizon{margin-top:clamp(26px,3.6vw,40px);border:1px solid var(--edge);border-radius:var(--r-lg);
+  background:
+    radial-gradient(80% 160% at 88% 0%,rgba(167,139,250,.10),transparent 62%),
+    linear-gradient(180deg,var(--s-2),var(--s-1));
+  padding:clamp(18px,2.6vw,26px);display:grid;grid-template-columns:auto 1fr;
+  gap:clamp(16px,2.6vw,30px);align-items:center}
+@media (max-width:680px){.horizon{grid-template-columns:1fr;gap:14px}}
+.horizon .figs{display:flex;align-items:baseline;gap:clamp(14px,2vw,22px)}
+.horizon .fig{display:grid;gap:4px}
+.horizon .fig b{font-size:clamp(34px,5.6vw,58px);line-height:.94;font-weight:600;
+  letter-spacing:-.035em;font-variant-numeric:tabular-nums;
+  background:linear-gradient(96deg,var(--accent),var(--accent-3));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+@supports not (-webkit-background-clip:text){.horizon .fig b{color:var(--accent)}}
+.horizon .fig span{font:400 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.horizon .fig.small b{font-size:clamp(20px,2.6vw,28px);
+  background:none;-webkit-background-clip:border-box;background-clip:border-box;color:var(--muted)}
+.horizon .say{color:var(--muted);font-size:14.5px;line-height:1.58;max-width:46ch}
+.horizon .say b{color:var(--ink);font-weight:500}
+.horizon .say em{font-style:normal;color:var(--dim);font-size:12.5px;display:block;margin-top:8px;
+  font-family:var(--mono);letter-spacing:.02em}
+
+/* ── per-phase spans on the roadmap ─────────────────────────────────────── */
+.phase .span{display:inline-flex;align-items:baseline;gap:5px;margin-left:10px;
+  padding:3px 9px;border-radius:999px;border:1px solid var(--edge);background:var(--s-1);
+  font:500 11px/1 var(--mono);letter-spacing:.06em;color:var(--accent-3);vertical-align:middle;
+  font-variant-numeric:tabular-nums}
+.phase .span i{font-style:normal;color:var(--dim);letter-spacing:.1em}
+
+/* ── the stat row: give every figure the same tabular treatment ─────────── */
+.stat .v span{font-variant-numeric:tabular-nums}
+
+/* ── counted inline figures elsewhere on the page ───────────────────────── */
+.tally{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:600}
+
+.no-js .horizon{display:none}
+.no-js .phase .span{display:none}
+
+</style>
 </head>
 <body class="no-js">
 <a class="skip" href="#vision">Skip to content</a>
@@ -573,6 +630,19 @@ body[data-aud] section[data-key].relevant > .shell > .sec-k::after{
   </div>
 
   <div class="ticker" aria-hidden="true"><div class="ticker-track"><span>Hope Probe</span><span>Rashid Rover</span><span>Lunar Gateway contribution</span><span>Satellites</span><span>Asteroid &amp; deep-space ambitions</span><span>Food BIOME</span><span>Olympus</span><span>Eyes on Universe</span><span>Arkisys</span><span>MARS-2117</span><span>National Space Strategy 2030</span><span>Hope Probe</span><span>Rashid Rover</span><span>Lunar Gateway contribution</span><span>Satellites</span><span>Asteroid &amp; deep-space ambitions</span><span>Food BIOME</span><span>Olympus</span><span>Eyes on Universe</span><span>Arkisys</span><span>MARS-2117</span><span>National Space Strategy 2030</span></div></div>
+
+  <div class="shell">
+    <div class="horizon">
+      <div class="figs">
+        <div class="fig"><b data-h="years">0</b><span>years to the 2117 horizon</span></div>
+        <div class="fig small"><b data-h="days">0</b><span>days</span></div>
+        <div class="fig small"><b data-h="since">0</b><span>years since 1974</span></div>
+      </div>
+      <p class="say">The roadmap runs from a <b>1974</b> meeting with NASA to <b>MARS-2117</b>.
+        Counted from today, that is the distance still to cover.
+        <em>Every figure here is arithmetic on dates this page already states — nothing is estimated.</em></p>
+    </div>
+  </div>
 
   <section id="vision" data-key="vision">
     <div class="shell">
@@ -1028,10 +1098,11 @@ document.body.classList.remove('no-js');document.body.classList.add('js');
   (function(){
     var els = [].slice.call(document.querySelectorAll('[data-count]'));
     if (!els.length) return;
-    if (RED || !('IntersectionObserver' in window)) {
-      els.forEach(function(e){ e.textContent = e.getAttribute('data-final'); });
-      return;
-    }
+    function settleAll(){ els.forEach(function(e){ e.textContent = e.getAttribute('data-final'); }); }
+    /* backstop outside IO: if the observer never fires — measured to happen in
+       non-compositing contexts — the figures must still be correct. */
+    setTimeout(settleAll, 2600);
+    if (RED || !('IntersectionObserver' in window)) { settleAll(); return; }
     var io = new IntersectionObserver(function(en){
       en.forEach(function(entry){
         if (!entry.isIntersecting) return;
@@ -1039,15 +1110,18 @@ document.body.classList.remove('no-js');document.body.classList.add('js');
         var to = parseFloat(el.getAttribute('data-count'));
         var pre = el.getAttribute('data-pre') || '';
         var post = el.getAttribute('data-post') || '';
-        var t0 = performance.now(), dur = 1100;
+        var t0 = performance.now(), dur = 1100, done = false;
+        function finish(){ if (done) return; done = true;
+          el.textContent = el.getAttribute('data-final'); }
         function step(now){
+          if (done) return;
           var p = Math.min(1, (now - t0) / dur);
           var e = 1 - Math.pow(1 - p, 3);          /* ease-out cubic */
           el.textContent = pre + Math.round(to * e).toLocaleString() + post;
-          if (p < 1) requestAnimationFrame(step);
-          else el.textContent = el.getAttribute('data-final');
+          if (p < 1) requestAnimationFrame(step); else finish();
         }
         requestAnimationFrame(step);
+        setTimeout(finish, dur + 260);   /* same floor: never leave it stuck */
       });
     }, {rootMargin:'0px 0px -12% 0px'});
     els.forEach(function(e){ io.observe(e); });
@@ -1439,6 +1513,129 @@ document.body.classList.remove('no-js');document.body.classList.add('js');
   var saved = null; try { saved = localStorage.getItem('xs-aud'); } catch(e){}
   var initial = (q && AUD[q]) ? q : ((saved && AUD[saved]) ? saved : null);
   if (initial) apply(initial, false);
+})();
+
+</script>
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   v5 LIVE NUMBERS — behaviour.
+
+   PROVENANCE OF EVERY NUMBER ON THIS PAGE, because that is the whole discipline:
+     1974  stated — "A 1974 meeting with NASA set the foundation"
+     2030  stated — "Aligned with UAE National Space Strategy 2030", "NOW–2030"
+     2040  stated — "2030–2040 UAE Space City & Industry Scale-Up"
+     2117  stated — "MARS-2117", "2040–2117 Deep-Space Economy"
+     4     stated — "4 Pillars powering XperienceSpace"
+   Everything the counters show is one of those, or subtraction between one of
+   those and today's date. No percentages anywhere. No figure describes
+   performance, uptake, funding or results — because the page does not state any
+   and inventing one would be the exact failure this whole line of work exists to
+   have corrected.
+
+   The upside of that constraint: these are LIVE. The horizon is a different
+   number tomorrow. "2117" is abstract; "91 years from today" is not.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  var STILL = /[?&]noreveal/.test(location.search);
+  var RED = matchMedia('(prefers-reduced-motion:reduce)').matches || STILL;
+
+  var NOW = new Date();
+  var YEAR = NOW.getFullYear();
+  var HORIZON = 2117, ORIGIN = 1974;
+
+  /* every counter registers how to settle itself, so a single backstop can
+     finish all of them if neither IO nor rAF ever fires */
+  var SETTLERS = [];
+  setTimeout(function(){ SETTLERS.forEach(function(f){ f(); }); }, 2600);
+
+  /* ── count up to a value when it scrolls into view ────────────────────── */
+  function countTo(el, value, render){
+    render = render || function(v){ return String(v); };
+    var settled = false;
+    function settle(){ if (settled) return; settled = true; el.textContent = render(value); }
+    SETTLERS.push(settle);
+    if (RED || !('IntersectionObserver' in window)) { settle(); return; }
+    var io = new IntersectionObserver(function(en){
+      en.forEach(function(entry){
+        if (!entry.isIntersecting) return;
+        io.unobserve(el);
+        if (settled) return;
+        var t0 = performance.now(), dur = 1000, done = false;
+        function finish(){ if (done) return; done = true; settled = true; el.textContent = render(value); }
+        (function step(now){
+          if (done) return;
+          var p = Math.min(1, (now - t0)/dur);
+          var e = 1 - Math.pow(1 - p, 3);
+          el.textContent = render(Math.round(value * e));
+          if (p < 1) requestAnimationFrame(step); else finish();
+        })(performance.now());
+        /* floor: if rAF never fires (background tab, embedded webview, any
+           non-compositing context) the figure still lands on its real value
+           instead of being stuck at zero. Correctness outranks the animation. */
+        setTimeout(finish, dur + 260);
+      });
+    }, {rootMargin:'0px 0px -12% 0px'});
+    io.observe(el);
+  }
+
+  /* ── the horizon block ────────────────────────────────────────────────── */
+  (function(){
+    var host = document.querySelector('.horizon'); if (!host) return;
+    var yearsEl = host.querySelector('[data-h="years"]');
+    var daysEl  = host.querySelector('[data-h="days"]');
+    var sinceEl = host.querySelector('[data-h="since"]');
+
+    var target = new Date(HORIZON, 0, 1);
+    var msPerDay = 86400000;
+    var days = Math.max(0, Math.round((target - NOW) / msPerDay));
+    var years = HORIZON - YEAR;
+    var since = YEAR - ORIGIN;
+
+    if (yearsEl) countTo(yearsEl, years);
+    if (sinceEl) countTo(sinceEl, since);
+    if (daysEl)  countTo(daysEl, days, function(v){ return v.toLocaleString(); });
+
+    /* the day figure ticks over at midnight without needing a reload */
+    if (daysEl && !RED) {
+      setInterval(function(){
+        var d = Math.max(0, Math.round((target - new Date()) / msPerDay));
+        if (String(d.toLocaleString()) !== daysEl.textContent) daysEl.textContent = d.toLocaleString();
+      }, 60000);
+    }
+  })();
+
+  /* ── per-phase spans on the roadmap ───────────────────────────────────── */
+  (function(){
+    var phases = [].slice.call(document.querySelectorAll('.traj .phase'));
+    if (!phases.length) return;
+    phases.forEach(function(p){
+      var yrEl = p.querySelector('.yr'); if (!yrEl) return;
+      var txt = yrEl.textContent;
+      /* read the span straight off the label the page already prints */
+      var nums = txt.match(/\d{4}/g) || [];
+      var from, to;
+      if (/^NOW/i.test(txt.trim())) { from = YEAR; to = parseInt(nums[0], 10); }
+      else if (nums.length >= 2)    { from = parseInt(nums[0], 10); to = parseInt(nums[1], 10); }
+      else return;
+      if (!from || !to || to <= from) return;
+
+      var span = document.createElement('span');
+      span.className = 'span';
+      var b = document.createElement('b'); b.textContent = '0';
+      var i = document.createElement('i'); i.textContent = 'years';
+      span.appendChild(b); span.appendChild(i);
+      yrEl.appendChild(span);
+      countTo(b, to - from);
+    });
+  })();
+
+  /* ── inline tallies: counts the page already states ───────────────────── */
+  (function(){
+    [].slice.call(document.querySelectorAll('[data-tally]')).forEach(function(el){
+      countTo(el, parseInt(el.getAttribute('data-tally'), 10));
+    });
+  })();
 })();
 
 </script>
