@@ -824,6 +824,85 @@ body[data-aud] section[data-key].relevant > .shell > .sec-k::after{
 }
 
 </style>
+<style id="v9-floor">
+/* ═══════════════════════════════════════════════════════════════════════════
+   v9 RAISING THE FLOOR — the flat middle.
+
+   Jared: "so much better, like, st. deviation increased, for sure."
+
+   The variance he felt was real and I diagnosed it as: spectacle added in three
+   places (hero, ecosystem graph, trajectory), everything between left at v2's
+   restraint level. The page swings — strong moment, flat stretch, strong moment.
+   The fix for variance is NOT a fourth peak. It is lifting the troughs.
+
+   The flattest block on the page is "Strategic benefits to the UAE": five
+   identical small cards in a grid. Five equal boxes is the pattern a page falls
+   back on when nobody decided what matters most — it reads as a list of things
+   rather than an argument.
+
+   These are the five reasons a country would fund this. They deserve to be read,
+   not skimmed. So: no cards. A typographic ledger with real hierarchy — the
+   claim large enough to actually land, the explanation beneath it, hairline
+   separated, the way a serious document sets out its case.
+
+   No new effects. This is the point: the floor comes up through TYPOGRAPHY and
+   RHYTHM, not through adding another moving part. Adding a fourth spectacle here
+   would have widened the gap I was trying to close.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* the benefits block stops being a card grid and becomes a ledger */
+#ecosystem .cards{
+  display:grid;grid-template-columns:1fr;gap:0;
+  margin-top:clamp(20px,2.8vw,28px);
+  border-top:1px solid var(--edge);
+}
+#ecosystem .cards .card{
+  border:0;border-bottom:1px solid var(--edge);border-radius:0;
+  background:transparent;padding:clamp(20px,2.8vw,30px) 0;
+  display:grid;grid-template-columns:minmax(220px,.85fr) 1.6fr;
+  gap:6px clamp(20px,3vw,44px);align-items:baseline;
+  transition:none;
+}
+#ecosystem .cards .card:hover{background:transparent;border-color:var(--edge);transform:none}
+#ecosystem .cards .card h3{
+  font-size:clamp(19px,2.4vw,27px);line-height:1.12;font-weight:600;
+  letter-spacing:-.024em;margin:0;color:var(--ink);
+}
+#ecosystem .cards .card p{
+  font-size:clamp(14.5px,1.5vw,16px);line-height:1.6;color:var(--muted);max-width:52ch;
+}
+/* the accent marks the row you are on, rather than five boxes competing */
+@media (hover:hover) and (pointer:fine){
+  #ecosystem .cards .card{position:relative}
+  #ecosystem .cards .card::after{
+    content:"";position:absolute;inset-inline-start:0;bottom:-1px;height:1px;width:0;
+    background:linear-gradient(90deg,var(--accent),transparent);
+    transition:width .45s cubic-bezier(.22,.8,.3,1);
+  }
+  #ecosystem .cards .card:hover::after{width:100%}
+  /* the spotlight belonged to boxes; a ledger row does not want it */
+  #ecosystem .cards .card::before{display:none}
+}
+@media (max-width:720px){
+  #ecosystem .cards .card{grid-template-columns:1fr;gap:8px}
+}
+
+/* the Welcome Center trio keeps its cards but gains real heading weight, so it
+   is not competing at the same flat pitch as everything else */
+#gateway .cards .card h3{
+  font-size:clamp(17px,2vw,20px);letter-spacing:-.016em;
+  padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid var(--edge);
+}
+
+/* the do / do-not split is an argument, not two lists — give it contrast */
+.split .panel.do{border-color:rgba(94,234,212,.24)}
+.split .panel.dont{background:transparent;border-style:dashed}
+.split .panel h3{
+  font-size:clamp(16px,1.9vw,19px);letter-spacing:-.014em;
+  padding-bottom:10px;border-bottom:1px solid var(--edge);margin-bottom:4px;
+}
+
+</style>
 </head>
 <body class="no-js">
 <a class="skip" href="#vision">Skip to content</a>
