@@ -758,12 +758,16 @@ footer b{color:var(--dim)}
       SG_STILL=/[?&]noreveal/.test(location.search),
       SG_RED=matchMedia('(prefers-reduced-motion:reduce)').matches||SG_STILL;
   function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
-  function build(){
+  function build(keepZ){
+    /* HARDENED 24/08: keepZ preserves each star's animated depth so a resize
+       (iOS URL bar) does not snap the starfield back to its seeded state. */
+    var oldZ=(keepZ&&stars.length)?stars.map(function(s){return s.z}):null;
     DPR=Math.min(devicePixelRatio||1,2);
     W=c.width=c.offsetWidth*DPR;H=c.height=c.offsetHeight*DPR;
     var r=rng(21170824);stars=[];
     for(var i=0;i<Math.min(300,W*H/8000);i++)
       stars.push({x:(r()*2-1),y:(r()*2-1),z:.15+r()*.85,tw:r()*6.28,g:i%17===0});
+    if(oldZ)for(var k=0;k<stars.length&&k<oldZ.length;k++)stars[k].z=oldZ[k];
   }
   function frame(t){
     x.clearRect(0,0,W,H);
@@ -800,7 +804,11 @@ footer b{color:var(--dim)}
     x.fillStyle='#F2DFB4';x.fillRect(sx2-1.4*DPR,sy2-1.4*DPR,2.8*DPR,2.8*DPR);
     if(!SG_RED)requestAnimationFrame(frame);
   }
-  build();addEventListener('resize',function(){build();if(SG_RED)frame(0)});
+  build();
+  var sgRs;addEventListener('resize',function(){
+    clearTimeout(sgRs);
+    sgRs=setTimeout(function(){build(true);if(SG_RED)frame(0)},180);
+  });
   if(SG_RED)frame(0);else requestAnimationFrame(frame);
 })();
 </script>
