@@ -33,7 +33,7 @@
      the system, one moment of spectacle, everything else earning its place.
 
      HONESTY (unchanged and non-negotiable): noindex, full disclosure in the
-     footer, Paul's permission named with its date, and NO third-party imagery —
+     footer, the source named and the absence of any affiliation stated plainly, and NO third-party imagery —
      every visual is drawn in-page as canvas or vector. The page this line of
      work replaced was killed for carrying fabricated AI infographics with
      garbled Arabic; there is no Arabic here for the same reason, and any Arabic
@@ -1257,7 +1257,7 @@ body[data-aud] section[data-key].relevant > .shell > .sec-k::after{
 <footer>
   <div class="shell">
     <span>© 2025 XperienceSpace Initiative – Supporting the UAE Space Nation vision. · Designed for a bright, responsible &amp; investable future in space.</span>
-    <span><b>A Lilliss IT prototype</b>, built by Jared Lilliss (Lilliss IT) from xperiencespace.com content with Paul's permission, Discord 23/06/2026. Local prototype for review only: not affiliated with the XperienceSpace Initiative, not published, not indexed. Carries no third-party imagery: every visual on this page is drawn in-page as vector or canvas.</span>
+    <span><b>A Lilliss IT prototype</b>, built by Jared Lilliss (Lilliss IT) from publicly available xperiencespace.com content. An unsolicited concept, shown for review: not affiliated with, endorsed by, or commissioned by the XperienceSpace Initiative, and not indexed. Carries no third-party imagery: every visual on this page is drawn in-page as vector or canvas.</span>
   </div>
 </footer>
 
@@ -2115,6 +2115,29 @@ document.body.classList.remove('no-js');document.body.classList.add('js');
    TO GO LIVE IN ARABIC, someone at XperienceSpace fills AR below. Every key maps
    to text already on the page; nothing new needs writing, only translating. The
    moment a key has a value it is used automatically.
+
+   ── NUMERALS: DO NOT CONVERT THEM. ──────────────────────────────────────────
+   The obvious-looking improvement here is to render digits as Arabic-Indic
+   (٠١٢٣٤٥٦٧٨٩) when the page is in Arabic. For the UAE that is WRONG.
+
+   Checked 25/08/2026 against the UAE government's own Arabic portal (u.ae/ar),
+   which is the register this page is trying to sit beside. Its Arabic copy
+   writes every figure in Western digits — including, verbatim, "2117" for the
+   Mars project, "2071", "2031", "50:50", and the emergency numbers 999/997/998.
+   That is the same number our headline uses, in Arabic, on a UAE government
+   surface. Arabic-Indic digits are normal in Egypt and parts of the Levant;
+   the Gulf, and the UAE especially, uses Western digits in both languages.
+
+   So: no numeral conversion, no `toLocaleString('ar-u-nu-arab')`, no digit map.
+   Translate the WORDS around the numbers and leave the numbers alone.
+
+   What IS needed, and is already done: year ranges like 2030–2117 are wrapped
+   in `direction:ltr;unicode-bidi:isolate` (v8-lang.css). Without that, an
+   en-dash between two numbers is a neutral character in an RTL paragraph and
+   the range can render reversed as 2117–2030. Verified 25/08: all four ranges
+   in xs-v2.html sit inside covered selectors (.kv dd, .stat .v, .phase .yr).
+   If you add a new range, put it inside one of those or add it to that rule.
+   ────────────────────────────────────────────────────────────────────────────
    ═══════════════════════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
