@@ -84,7 +84,7 @@
 
   --r:12px; --r-lg:16px; --r-sm:8px;
   --pad:clamp(20px,4.4vw,48px);
-  --maxw:1200px;
+  --maxw:clamp(1060px, 68vw, 1500px); /* grows on wide screens, hard ceiling at 1500 - a flat cap made the page look broken at low zoom (26/08/2026) */
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;overflow-x:clip}
