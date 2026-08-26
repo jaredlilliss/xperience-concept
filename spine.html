@@ -271,6 +271,8 @@ body{
 
 /* ── no-JS: everything becomes a plain readable list ────────────────────── */
 .fallback{display:none}
+.fallback .s{display:block;margin-top:5px;font:400 10.5px/1.5 var(--mono);color:var(--faint)}
+.fallback .s a{color:var(--muted)}
 .no-js body{overflow:auto}
 .no-js .world,.no-js .hint,.no-js .scrub{display:none}
 .no-js .fallback{
@@ -567,9 +569,13 @@ body{
   var fb = document.getElementById('fb');
   STOPS.forEach(function(s){
     var li = document.createElement('li');
+    /* the source goes here too: with JS off this list IS the page, and its own
+       header promises a named primary source for every date. Built from the
+       same SRC map so the two views cannot drift apart. */
     li.innerHTML = '<span class="y">' + s.yr + '</span>' +
                    '<span class="n">' + s.nm + '</span>' +
-                   '<span class="d">' + s.no + '</span>';
+                   '<span class="d">' + s.no + '</span>' +
+                   '<span class="s">' + srcHTML(s.at) + '</span>';
     fb.appendChild(li);
   });
 
