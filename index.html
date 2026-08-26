@@ -491,6 +491,51 @@ body[data-aud] section[data-key].relevant > .shell > .sec-k::after{
 /* no JS: the control is meaningless, the page is already the universal version */
 .no-js .aud{display:none}
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   FILTERING — the control stops re-emphasising and starts collapsing.
+
+   Only ever active when body[data-aud] is set, i.e. after the reader has
+   chosen. Nothing here applies to a page nobody has filtered.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body[data-aud] section.folded > .shell{display:none}
+
+.fold-bar{
+  display:none;
+  width:100%;text-align:left;cursor:pointer;
+  background:transparent;border:0;border-top:1px solid var(--edge);
+  padding:20px 0;color:inherit;font:inherit;
+  align-items:baseline;gap:16px;
+  transition:opacity .2s ease;
+}
+body[data-aud] section.folded > .fold-bar{display:flex}
+.fold-bar:hover{opacity:.78}
+.fold-bar:focus-visible{outline:2px solid var(--accent,#7cc9f5);outline-offset:4px}
+
+.fold-bar .fb-title{
+  font-size:clamp(16px,1.7vw,19px);font-weight:600;letter-spacing:-.01em;
+  flex:1 1 auto;
+}
+.fold-bar .fb-hint{
+  font:500 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);flex:none;white-space:nowrap;
+}
+.fold-bar .fb-hint::after{content:" +";}
+
+/* the folded bar sits inside the section's own horizontal rhythm */
+section.folded{padding-top:0;padding-bottom:0}
+section.folded > .fold-bar{max-width:1200px;margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+
+/* a section the reader has opened again keeps a quiet marker, so they can see
+   they are looking at something outside their own selection */
+body[data-aud] section.unfolded > .shell{
+  border-left:1px solid var(--edge);padding-left:clamp(14px,2vw,26px);
+}
+
+@media (prefers-reduced-motion:reduce){
+  .fold-bar{transition:none}
+}
+
 </style>
 <style id="v5-numbers">
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -983,7 +1028,7 @@ body[data-aud] section[data-key].relevant > .shell > .sec-k::after{
         <div class="aud-head">
           <span class="q">I'm here as</span>
           <div class="aud-opts" role="group" aria-label="Choose your perspective"></div>
-          <span class="hint">changes emphasis, never the facts</span>
+          <span class="hint">folds what isn&rsquo;t for you &mdash; nothing is removed, one click reopens it</span>
         </div>
         <div class="aud-body">
           <div>
@@ -1798,6 +1843,7 @@ document.body.classList.remove('no-js');document.body.classList.add('js');
    localStorage, and the URL updates without adding history entries.
    ═══════════════════════════════════════════════════════════════════════════ */
 (function(){
+  var REDUCED = matchMedia('(prefers-reduced-motion:reduce)').matches;
   "use strict";
 
   var AUD = {
@@ -1876,6 +1922,71 @@ document.body.classList.remove('no-js');document.body.classList.add('js');
     opts.appendChild(b);
   });
 
+  /* ── FILTERING ────────────────────────────────────────────────────────────
+     Which sections stay OPEN for each audience. Everything else folds to a bar.
+
+     `vision` and `join` are absent from every list on purpose — they are pinned
+     open below, because one carries the argument and the other carries the
+     action. A page that folds its own point is hiding, not filtering.
+
+     These lists are judgement, not data, so they are written where they can be
+     argued with rather than buried in a lookup. */
+  var KEEP = {
+    investor:   ['ecosystem','city'],
+    partner:    ['city','ecosystem'],
+    education:  ['gateway','pillars'],
+    government: ['pillars','city'],
+    community:  ['gateway']
+  };
+  var PINNED = ['vision','join'];
+
+  function foldable(){
+    return [].slice.call(document.querySelectorAll('section[data-key]'))
+      .filter(function(s){ return PINNED.indexOf(s.getAttribute('data-key')) === -1; });
+  }
+
+  /* one bar per foldable section, built from the section's OWN heading so the
+     label can never drift from what is inside it */
+  function buildBars(){
+    foldable().forEach(function(sec){
+      if (sec.querySelector(':scope > .fold-bar')) return;
+      var h = sec.querySelector('h2');
+      if (!h) return;
+      if (!sec.id) sec.id = 'sec-' + sec.getAttribute('data-key');
+      var shell = sec.querySelector(':scope > .shell');
+      if (shell && !shell.id) shell.id = sec.id + '-body';
+
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'fold-bar';
+      b.setAttribute('aria-expanded', 'false');
+      if (shell) b.setAttribute('aria-controls', shell.id);
+      b.innerHTML = '<span class="fb-title"></span><span class="fb-hint">show</span>';
+      b.querySelector('.fb-title').textContent = h.textContent.trim();
+      b.addEventListener('click', function(){
+        sec.classList.remove('folded');
+        sec.classList.add('unfolded');
+        b.setAttribute('aria-expanded', 'true');
+        sec.scrollIntoView({block:'start', behavior: REDUCED ? 'auto' : 'smooth'});
+      });
+      sec.insertBefore(b, sec.firstChild);
+    });
+  }
+
+  function applyFilter(key){
+    buildBars();
+    var keep = KEEP[key] || [];
+    foldable().forEach(function(sec){
+      var k = sec.getAttribute('data-key');
+      var stays = keep.indexOf(k) !== -1;
+      sec.classList.toggle('folded', !stays);
+      if (stays) sec.classList.remove('unfolded');
+      var b = sec.querySelector(':scope > .fold-bar');
+      if (b) b.setAttribute('aria-expanded', stays ? 'true' : 'false');
+    });
+  }
+
+
   function markRelevant(key){
     [].slice.call(document.querySelectorAll('section[data-key]')).forEach(function(s){
       s.classList.toggle('relevant', !!key && s.getAttribute('data-key') === AUD[key].section);
@@ -1897,6 +2008,7 @@ document.body.classList.remove('no-js');document.body.classList.add('js');
     cta.setAttribute('href', a.href);
     where.innerHTML = 'Most relevant section: <a href="#' + a.section + '">' + a.where + '</a>';
     markRelevant(key);
+    applyFilter(key);
     try { localStorage.setItem('xs-aud', key); } catch(e){}
     if (push) {
       var u = new URL(location.href);
