@@ -182,7 +182,7 @@ h1 .g{background:linear-gradient(96deg,var(--accent) 8%,var(--accent-2) 52%,var(
 /* ───────────────── sections ───────────────── */
 section{padding:clamp(30px,3.6vw,54px) 0;position:relative}
 .sec-k{font:500 12.5px/1 var(--sans);color:var(--accent);margin-bottom:14px;letter-spacing:-.005em}
-h2{font-size:clamp(24px,3vw,35px);line-height:1.12;letter-spacing:-.022em;font-weight:600;max-width:26ch}
+h2{font-size:clamp(21px,2.3vw,27px);line-height:1.16;letter-spacing:-.014em;font-weight:600;max-width:30ch}
 .sec-sub{margin-top:10px;color:var(--muted);max-width:68ch;font-size:clamp(15px,1.5vw,16.5px);line-height:1.55}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.2vw,26px);margin-top:clamp(18px,2.4vw,28px);align-items:start}
 @media (max-width:860px){.grid-2{grid-template-columns:1fr}}
@@ -682,6 +682,43 @@ body[data-aud] section.unfolded > .shell{
   .human .who button{font-size:13px;padding:8px 13px}
 }
 
+/* ── THE MOMENT ────────────────────────────────────────────────────────────
+   This band is now the top of the type scale and the only composed image on
+   the page. Everything else was reduced to make room for it: after the h1,
+   every heading used to be 35-40px, so nothing read as more important than
+   anything else. Contrast needs a difference, not uniform loudness. */
+
+.human .say{font-size:clamp(34px,6.6vw,76px);line-height:1.02;max-width:15ch}
+
+.human .reach{margin:clamp(22px,3.4vw,38px) 0 0;padding:0;max-width:none}
+.human .reach svg{display:block;width:100%;height:auto;max-height:min(46vh,380px);overflow:visible}
+.reach-ground{stroke:var(--edge);stroke-width:1}
+.reach-arc{fill:none;stroke:url(#reach-g);stroke-width:2.5;stroke-linecap:round}
+.reach-dot{fill:var(--muted)}
+.reach-tick{stroke:rgba(233,188,106,.45);stroke-width:1;stroke-dasharray:2 4}
+.reach-now{fill:#E9BC6A}
+.reach-mars{fill:none;stroke:#E9899F;stroke-width:2}
+.reach-lab{
+  fill:var(--muted);font:500 12px/1 var(--mono);letter-spacing:.14em;
+}
+.reach-lab-now{fill:#E9BC6A}
+.human .reach figcaption{
+  margin-top:14px;color:var(--muted);
+  font:500 11.5px/1.5 var(--mono);letter-spacing:.13em;text-transform:uppercase;
+}
+
+/* the arc draws itself once, on reveal. enhancement only: with no JS and with
+   reduced motion it is simply already drawn. */
+.js .human .reach .reach-arc{stroke-dasharray:1200;stroke-dashoffset:1200}
+.js .human .reach.in .reach-arc{
+  animation:reach-draw 1.9s cubic-bezier(.22,.8,.28,1) forwards;
+}
+@keyframes reach-draw{to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){
+  .js .human .reach .reach-arc,
+  .js .human .reach.in .reach-arc{stroke-dasharray:none;stroke-dashoffset:0;animation:none}
+}
+
 </style>
 <style id="v7-ending">
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -715,7 +752,7 @@ body[data-aud] section.unfolded > .shell{
     var(--s-1);
 }
 .join h2{
-  font-size:clamp(26px,3.4vw,40px);line-height:1.08;letter-spacing:-.024em;max-width:22ch;
+  font-size:clamp(22px,2.6vw,31px);line-height:1.14;letter-spacing:-.016em;max-width:22ch;
 }
 .join .sec-sub{max-width:60ch;margin-top:11px}
 
@@ -1155,6 +1192,39 @@ body[data-aud] section.unfolded > .shell{
       <div class="who rv">
         <button type="button" data-goto="education">Youth</button><button type="button" data-goto="community">Families</button><button type="button" data-goto="partner">Professionals</button><button type="button" data-goto="community">Creators</button>
       </div>
+      <figure class="reach rv" aria-labelledby="reach-cap">
+        <svg viewBox="0 0 1000 420" role="img" aria-label="A single arc rising from a horizon marked 1970s to a disc marked 2117, with today marked low and early on the curve." preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="reach-g" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#E9BC6A" stop-opacity=".85"/>
+              <stop offset="55%" stop-color="#F0A07A" stop-opacity=".9"/>
+              <stop offset="100%" stop-color="#E9899F"/>
+            </linearGradient>
+          </defs>
+
+          <!-- the ground: where it started -->
+          <line class="reach-ground" x1="0" y1="380" x2="1000" y2="380"/>
+
+          <!-- the span itself. one line, drawn once. -->
+          <path class="reach-arc" d="M 90 380 C 340 380, 620 300, 900 70"/>
+
+          <!-- origin -->
+          <circle class="reach-dot" cx="90" cy="380" r="5"/>
+          <text class="reach-lab" x="90" y="405" text-anchor="middle">1970s</text>
+
+          <!-- today, at its true position along the span -->
+          <circle class="reach-now" cx="370" cy="346" r="7"/>
+          <line class="reach-tick" x1="370" y1="346" x2="370" y2="380"/>
+          <text class="reach-lab reach-lab-now" x="370" y="405" text-anchor="middle">2026</text>
+
+          <!-- the destination -->
+          <circle class="reach-mars" cx="900" cy="70" r="13"/>
+          <text class="reach-lab" x="900" y="42" text-anchor="middle">2117</text>
+        </svg>
+        <figcaption id="reach-cap">
+          Ninety-one years from here. The marker is today.
+        </figcaption>
+      </figure>
       <p class="then rv">A national movement where youth, families, professionals and creators
         participate in UAE space initiatives. <b>Whether you are a student, educator, entrepreneur,
         investor, technology developer or policymaker, there is a place for you inside UAE’s
