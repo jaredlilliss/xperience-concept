@@ -240,8 +240,15 @@ body{
 /* ── chrome: almost none ────────────────────────────────────────────────── */
 .top{
   position:fixed;top:0;left:0;right:0;z-index:5;
-  display:flex;align-items:baseline;justify-content:space-between;gap:20px;
-  padding:22px clamp(18px,3vw,34px);pointer-events:none;
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:14px;flex-wrap:wrap;
+  padding:22px clamp(16px,3vw,34px);pointer-events:none;
+}
+@media (max-width:620px){
+  .who{font-size:11px;letter-spacing:.16em}
+  .who span{font-size:9.5px;letter-spacing:.12em}
+  .count{font-size:10px;letter-spacing:.12em}
+  .foot{max-width:30ch;font-size:9.5px}
 }
 .who{font:500 12px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase}
 .who span{color:var(--faint);display:block;margin-top:7px;font-size:10px;letter-spacing:.16em}
@@ -513,7 +520,11 @@ body{
     var yr = Math.round(ORIGIN + p * SPAN);
     /* This is a POSITION, not a range. Written as an arrow it read as a span
        starting in 1982, contradicting 'THE 1970s' on screen beneath it. */
-    count.textContent = 'AT ' + (yr <= 1979 ? 'THE 1970s' : yr) + '  ·  SPAN 1970s–2117';
+    /* narrow screens drop the span half - it will not fit beside the wordmark in
+       339px. The PROVENANCE sub-line is never touched at any width. */
+    var lbl = (yr <= 1979 ? 'THE 1970s' : yr);
+    count.textContent = innerWidth < 620 ? ('AT ' + lbl)
+                                         : ('AT ' + lbl + '  ·  SPAN 1970s–2117');
     if (document.activeElement !== scrub) scrub.value = Math.round(p * 1000);
 
     /* whichever milestone is nearest the centre of the screen is the one you
