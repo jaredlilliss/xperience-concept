@@ -63,7 +63,12 @@
   --far:#5A1F1A;       /* 2117 — Mars, rust */
   --ink:#EEF1F8;
   --muted:rgba(238,241,248,.52);
-  --faint:rgba(238,241,248,.26);
+  /* .26 measured about 2.2:1 on the rust ground and 2.3:1 on navy, against a
+     4.5:1 AA requirement - and everything wearing it is CONTENT, not ornament:
+     the note under each milestone, the source line, the gap labels, the hint,
+     and the provenance footer. The quiet look was being paid for by the text
+     that carries the page's honesty claim. */
+  --faint:rgba(238,241,248,.58);
   --line:rgba(238,241,248,.30);
   --now:#F2C46A;
   --sans:'Inter',ui-sans-serif,system-ui,-apple-system,sans-serif;
@@ -193,7 +198,9 @@ body{
 .src a:hover,.src a:focus-visible{color:var(--now);border-color:var(--now)}
 
 .mark{fill:none;stroke:var(--ink);stroke-width:1.25;stroke-linecap:round}
-.mark-soft{fill:none;stroke:var(--faint);stroke-width:1;stroke-dasharray:2 4}
+/* the dashed construction strokes ARE ornament, so they keep the old quiet
+   value rather than following --faint up to a text-legibility level. */
+.mark-soft{fill:none;stroke:rgba(238,241,248,.30);stroke-width:1;stroke-dasharray:2 4}
 .mark-fill{fill:var(--ink);stroke:none}
 .mark-now{stroke:var(--now)}
 .fill-now{fill:var(--now)}
@@ -431,7 +438,10 @@ body{
 
   function build(){
     rail.style.width = WIDE + 'px';
-    document.getElementById('ground').style.width = WIDE + 'px';
+    /* wider than the rail on purpose: measure() allows 240px of overtravel past
+       WIDE, and without the margin the body background shows through as a hard
+       navy strip at the Mars end. */
+    document.getElementById('ground').style.width = (WIDE + 480) + 'px';
 
     STOPS.forEach(function(s, i){
       var el = document.createElement('div');
