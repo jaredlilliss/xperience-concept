@@ -181,6 +181,16 @@ body{
   font:400 11px/1.4 var(--mono);color:var(--faint);
 }
 .stop.lost .nm{color:rgba(238,241,248,.68)}
+/* The honesty layer, made visible: arriving at a milestone shows where it came
+   from. Every one traces to a named primary source in the 26/08 ruling. */
+.src{
+  display:block;margin-top:0;max-height:0;overflow:hidden;opacity:0;
+  font:400 10px/1.5 var(--mono);letter-spacing:.06em;color:var(--faint);
+  transition:opacity .3s ease,max-height .34s ease,margin-top .34s ease;
+}
+.stop.on .src{opacity:1;max-height:5em;margin-top:10px}
+.src a{color:var(--muted);text-decoration:none;border-bottom:1px solid rgba(238,241,248,.2)}
+.src a:hover,.src a:focus-visible{color:var(--now);border-color:var(--now)}
 
 .mark{fill:none;stroke:var(--ink);stroke-width:1.25;stroke-linecap:round}
 .mark-soft{fill:none;stroke:var(--faint);stroke-width:1;stroke-dasharray:2 4}
@@ -199,6 +209,21 @@ body{
 }
 
 /* the long emptiness gets one honest label rather than filler */
+/* the ending - quiet, and the only place on the span that asks for anything */
+.ending{
+  position:absolute;top:56%;transform:translate(-50%,-50%);
+  width:max-content;max-width:38ch;text-align:center;
+}
+.ending h2{font:500 clamp(21px,2.6vw,32px)/1.22 var(--sans);letter-spacing:-.02em;color:var(--ink)}
+.ending p{margin-top:13px;font:400 11.5px/1.65 var(--mono);color:var(--faint)}
+.ending .go{
+  display:inline-block;margin-top:22px;padding:13px 22px;
+  border:1px solid var(--line);border-radius:2px;text-decoration:none;
+  font:500 11px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--ink);
+  transition:background .25s ease,border-color .25s ease;
+}
+.ending .go:hover,.ending .go:focus-visible{background:rgba(242,196,106,.12);border-color:var(--now)}
+.ending .sig{margin-top:16px;letter-spacing:.16em}
 .gap{
   position:absolute;top:calc(56% - 74px);transform:translateX(-50%);
   font:400 11px/1.5 var(--mono);letter-spacing:.16em;color:var(--faint);
@@ -321,13 +346,12 @@ body{
      no:'Cabinet approved', mark:'frame'},
     {at:2021, yr:'9 FEB 2021', nm:'Hope Probe enters Mars orbit',
      no:'First Arab nation to reach Mars', mark:'orbit'},
-    {at:2023, yr:'26 APR 2023', nm:'Rashid‑1', no:'Lost. Debris imaged at the landing site',
+    {at:2023, yr:'25 APR 2023', nm:'Rashid‑1', no:'Lost — the lander failed to touch down',
      mark:'descent', lost:true},
     {at:2025, yr:'14 JAN 2025', nm:'MBZ‑Sat', no:'MBRSC’s largest imaging satellite',
      mark:'track'},
     {at:2028, yr:'2028', nm:'Emirates Mission to the Asteroid Belt',
      no:'Launch', mark:'loop'},
-    {at:2030, yr:'2030–2040', nm:'UAE Space City', no:'Build phase', mark:'plan'},
     {at:2117, yr:'2117', nm:'Mars', no:'The horizon', mark:'mars', far:true}
   ];
 
@@ -340,7 +364,28 @@ body{
      Space City is a range - deriving a number from either would invent the
      precision this page exists to refuse. */
   var BIG = {1975:'1970s', 2019:'2019', 2021:'2021', 2023:'2023',
-             2025:'2025', 2028:'2028', 2030:'2030s', 2117:'2117'};
+             2025:'2025', 2028:'2028', 2117:'2117'};
+
+  /* Primary sources, taken from the 26/08 verify ruling's own verified table.
+     Where the ruling names a source but gives no URL (Rashid-1), the source is
+     NAMED and NOT linked - inventing a plausible link is the same failure as
+     inventing a date. */
+  var SRC = {
+    1975:['UAE Cabinet portal','https://uaecabinet.ae/en/details/news/mohammed-bin-rashid-witnesses-launch-of-strategic-plans-of-uae-space-agency'],
+    2019:['UAE Government Media Office','https://mediaoffice.ae/en/news/2019/3/UAE-Cabinet-approves-National-Space-Strategy-2030'],
+    2021:['MBRSC','https://www.mbrsc.ae/about/'],
+    2023:['MBRSC — Emirates Lunar Mission',''],
+    2025:['MBRSC satellite programme','https://www.mbrsc.ae/satellites/'],
+    2028:['u.ae — Projects of the 50','https://u.ae/en/about-the-uae/uae-in-the-future/projects-of-the-50/emirati-interplanetary-mission-2028'],
+    2117:['u.ae — the UAE in the future','https://u.ae/en/about-the-uae/uae-in-the-future/uae-future']
+  };
+
+  function srcHTML(at){
+    var v = SRC[at]; if (!v) return '';
+    return v[1]
+      ? 'Source: <a href="' + v[1] + '" target="_blank" rel="noopener noreferrer">' + v[0] + ' ↗</a>'
+      : 'Source: ' + v[0];
+  }
 
   var MARKS = {
     contact: '<svg width="54" height="54" viewBox="0 0 54 54"><circle class="mark" cx="27" cy="27" r="5"/>'+
@@ -375,7 +420,10 @@ body{
      reads as a cluster you can stop inside. At the old 6400 those stops were
      90px apart and collided in five places. */
   var SPANPX = Math.max(11000, innerWidth * 7);
-  var WIDE = SPANPX + PAD * 2;
+  var ENDPAD = 720;                     /* room past 2117 for the ending, which
+                                           you should ARRIVE at rather than read
+                                           in a fixed footer. */
+  var WIDE = SPANPX + PAD + ENDPAD;
 
   var STOPEL = [];   /* {el, at} in rail space - used to pick the focused stop */
 
@@ -395,6 +443,7 @@ body{
           '<b class="yr">' + s.yr + '</b>' +
           '<b class="nm">' + s.nm + '</b>' +
           '<b class="no">' + s.no + '</b>' +
+          '<b class="src">' + srcHTML(s.at) + '</b>' +
         '</span>';
       rail.appendChild(el);
       STOPEL.push({el:el, at:PAD + frac(s.at) * SPANPX});
@@ -407,12 +456,28 @@ body{
     t.innerHTML = '<i></i><b>TODAY &middot; ' + NOW + '</b>';
     rail.appendChild(t);
 
+    /* The ending. One action, one address. Placed past the last milestone so it
+       is somewhere you arrive, not a footer you were always looking at.
+       jaredlils99@gmail.com deliberately: contact@lilliss.au was submitted twice
+       and never minted, so it does not exist, and index.html already uses this. */
+    var e = document.createElement('div');
+    e.className = 'ending';
+    e.style.left = (PAD + SPANPX + 350) + 'px';
+    e.innerHTML =
+      '<h2>A concept, not a proposal.</h2>' +
+      '<p>Every milestone on this span is a public fact with a named source, set at its ' +
+      'true place in 142 years. Nothing here is affiliated with, endorsed by, or ' +
+      'commissioned by the XperienceSpace Initiative, and nothing on this page reaches them.</p>' +
+      '<a class="go" href="mailto:jaredlils99@gmail.com?subject=XperienceSpace%20concept%20%E2%80%94%20The%20Span">Write to the author</a>' +
+      '<p class="sig">Jared Lilliss &middot; Lilliss IT</p>';
+    rail.appendChild(e);
+
     /* Both voids get labelled, honestly, rather than filled.
        NOTE ON THE FIRST ONE: the Agency names no year for the NASA meeting, so
        this page must NOT compute a span from it - 'NOTHING SOURCED IN BETWEEN'
        is a statement about this page's own evidence, not about the UAE. */
     [[1975, 2019, 'NOTHING SOURCED IN BETWEEN'],
-     [2040, 2117, (2117 - 2040) + ' YEARS WITH NOTHING SCHEDULED IN THEM']
+     [2028, 2117, (2117 - 2028) + ' YEARS · NOTHING ELSE SOURCED IN BETWEEN']
     ].forEach(function(gp){
       var g = document.createElement('p');
       g.className = 'gap';
