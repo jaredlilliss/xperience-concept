@@ -80,9 +80,11 @@ body{
 
 /* ── the world ──────────────────────────────────────────────────────────── */
 .world{position:fixed;inset:0;overflow:hidden}
+/* the ground spans the WHOLE rail, not the viewport. If it is viewport-sized
+   the gradient never moves and the colour journey silently does not happen. */
 .ground{
-  position:absolute;inset:0;
-  background:linear-gradient(100deg,var(--near) 0%,#141C56 26%,#2B1F4A 52%,#43203A 76%,var(--far) 100%);
+  position:absolute;top:0;left:0;height:100%;
+  background:linear-gradient(100deg,var(--near) 0%,#141C56 22%,#2B1F4A 48%,#43203A 74%,var(--far) 100%);
 }
 .grain{
   position:absolute;inset:0;pointer-events:none;opacity:.5;
@@ -209,9 +211,9 @@ body{
 </header>
 
 <div class="world" id="world">
-  <div class="ground"></div>
   <div class="grain"></div>
   <div class="rail" id="rail">
+    <div class="ground" id="ground"></div>
     <div class="line"></div>
   </div>
 </div>
@@ -295,15 +297,20 @@ body{
 
   /* the span is deliberately much wider than the screen: travelling it should
      take real distance, because the subject is 142 years long. */
-  var WIDE = Math.max(6400, innerWidth * 4.2);
+  var PAD  = 200;                       /* breathing room at both ends: the first
+                                           stop sat at x=0 and translate(-50%) put
+                                           half of it off-screen. */
+  var SPANPX = Math.max(6400, innerWidth * 4.2);
+  var WIDE = SPANPX + PAD * 2;
 
   function build(){
     rail.style.width = WIDE + 'px';
+    document.getElementById('ground').style.width = WIDE + 'px';
 
     STOPS.forEach(function(s){
       var el = document.createElement('div');
       el.className = 'stop' + (s.lost ? ' lost' : '');
-      el.style.left = (frac(s.at) * WIDE) + 'px';
+      el.style.left = (PAD + frac(s.at) * SPANPX) + 'px';
       el.innerHTML = MARKS[s.mark] +
         '<b class="yr">' + s.yr + '</b>' +
         '<b class="nm">' + s.nm + '</b>' +
@@ -314,7 +321,7 @@ body{
     /* today */
     var t = document.createElement('div');
     t.className = 'today';
-    t.style.left = (frac(NOW) * WIDE) + 'px';
+    t.style.left = (PAD + frac(NOW) * SPANPX) + 'px';
     t.innerHTML = '<i></i><b>TODAY &middot; ' + NOW + '</b>';
     rail.appendChild(t);
 
@@ -322,7 +329,7 @@ body{
     var a = frac(2030), b = frac(2117);
     var g = document.createElement('p');
     g.className = 'gap';
-    g.style.left = ((a + b) / 2 * WIDE) + 'px';
+    g.style.left = (PAD + (a + b) / 2 * SPANPX) + 'px';
     g.textContent = (2117 - 2040) + ' YEARS WITH NOTHING SCHEDULED IN THEM';
     rail.appendChild(g);
   }
@@ -337,7 +344,7 @@ body{
     x += (target - x) * (REDUCED ? 1 : 0.12);
     if (Math.abs(target - x) < 0.5) x = target;
     rail.style.transform = 'translateX(' + (-x) + 'px)';
-    var p = maxX ? x / maxX : 0;
+    var p = maxX ? Math.min(1, Math.max(0, (x + innerWidth / 2 - PAD) / SPANPX)) : 0;
     var yr = Math.round(ORIGIN + p * SPAN);
     count.textContent = yr <= 1979 ? '1970s → 2117' : yr + ' → 2117';
     if (document.activeElement !== scrub) scrub.value = Math.round(p * 1000);
