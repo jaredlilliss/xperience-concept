@@ -168,11 +168,11 @@ h1 .g{background:linear-gradient(96deg,var(--accent) 8%,var(--accent-2) 52%,var(
 .stat p{color:var(--muted);font-size:14px;line-height:1.55;max-width:34ch}
 
 /* ───────────────── sections ───────────────── */
-section{padding:clamp(56px,8vw,104px) 0;position:relative}
+section{padding:clamp(30px,3.6vw,54px) 0;position:relative}
 .sec-k{font:500 12.5px/1 var(--sans);color:var(--accent);margin-bottom:14px;letter-spacing:-.005em}
-h2{font-size:clamp(26px,3.8vw,44px);line-height:1.08;letter-spacing:-.026em;font-weight:600;max-width:22ch}
-.sec-sub{margin-top:14px;color:var(--muted);max-width:64ch;font-size:clamp(15px,1.5vw,16.5px);line-height:1.6}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,2.6vw,32px);margin-top:clamp(28px,4vw,48px);align-items:start}
+h2{font-size:clamp(24px,3vw,35px);line-height:1.12;letter-spacing:-.022em;font-weight:600;max-width:26ch}
+.sec-sub{margin-top:10px;color:var(--muted);max-width:68ch;font-size:clamp(15px,1.5vw,16.5px);line-height:1.55}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.2vw,26px);margin-top:clamp(18px,2.4vw,28px);align-items:start}
 @media (max-width:860px){.grid-2{grid-template-columns:1fr}}
 
 .panel{border:1px solid var(--edge);border-radius:var(--r);background:var(--s-1);padding:clamp(18px,2.4vw,26px)}
@@ -207,7 +207,7 @@ h2{font-size:clamp(26px,3.8vw,44px);line-height:1.08;letter-spacing:-.026em;font
 .no-js .seg-panel > div:first-child h3{margin-top:0}
 
 /* ───────────────── hairline tables + cards ───────────────── */
-.rows{margin-top:clamp(24px,3.4vw,36px);border:1px solid var(--edge);border-radius:var(--r);overflow:hidden}
+.rows{margin-top:clamp(16px,2vw,22px);border:1px solid var(--edge);border-radius:var(--r);overflow:hidden}
 .row{display:grid;grid-template-columns:minmax(190px,.8fr) 1.6fr;gap:8px 22px;padding:16px clamp(14px,2vw,20px);
   border-bottom:1px solid var(--edge);background:var(--s-1);transition:background .2s}
 .row:last-child{border-bottom:0}
@@ -216,7 +216,7 @@ h2{font-size:clamp(26px,3.8vw,44px);line-height:1.08;letter-spacing:-.026em;font
 .row span{color:var(--muted);font-size:14px;line-height:1.58}
 @media (max-width:660px){.row{grid-template-columns:1fr;gap:4px}}
 
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:clamp(14px,1.8vw,20px);margin-top:clamp(24px,3.4vw,36px)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:clamp(12px,1.4vw,16px);margin-top:clamp(16px,2vw,22px)}
 .card{border:1px solid var(--edge);border-radius:var(--r);background:var(--s-1);padding:clamp(18px,2.2vw,24px);
   transition:background .2s,border-color .2s,transform .2s}
 .card:hover{background:var(--s-2);border-color:var(--edge-2);transform:translateY(-2px)}
@@ -343,7 +343,7 @@ footer b{color:var(--muted);font-weight:500}
 .ticker:hover .ticker-track{animation-play-state:paused}
 
 /* ── trajectory: a rail that draws itself as you scroll ─────────────────── */
-.traj{position:relative;margin-top:clamp(28px,4vw,44px);padding-left:34px}
+.traj{position:relative;margin-top:clamp(18px,2.4vw,28px);padding-left:34px}
 .traj::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--edge)}
 .traj-fill{position:absolute;left:9px;top:6px;width:2px;height:0;border-radius:2px;
   background:linear-gradient(180deg,var(--accent),var(--accent-3));
@@ -651,16 +651,16 @@ body[data-aud] section[data-key].relevant > .shell > .sec-k::after{
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .join{
-  padding:clamp(34px,5.4vw,68px) clamp(24px,4vw,56px);
+  padding:clamp(26px,3.4vw,44px) clamp(20px,3vw,38px);
   background:
     radial-gradient(85% 150% at 10% 0%, rgba(124,201,245,.13), transparent 58%),
     radial-gradient(70% 130% at 92% 100%, rgba(167,139,250,.10), transparent 62%),
     var(--s-1);
 }
 .join h2{
-  font-size:clamp(28px,4.4vw,52px);line-height:1.05;letter-spacing:-.028em;max-width:19ch;
+  font-size:clamp(26px,3.4vw,40px);line-height:1.08;letter-spacing:-.024em;max-width:22ch;
 }
-.join .sec-sub{max-width:56ch;margin-top:16px}
+.join .sec-sub{max-width:60ch;margin-top:11px}
 
 /* the action: one button that does not look like a nav item */
 .end-act{display:flex;align-items:center;gap:clamp(12px,2vw,20px);flex-wrap:wrap;
@@ -868,12 +868,12 @@ body[data-aud] section[data-key].relevant > .shell > .sec-k::after{
 /* the benefits block stops being a card grid and becomes a ledger */
 #ecosystem .cards{
   display:grid;grid-template-columns:1fr;gap:0;
-  margin-top:clamp(20px,2.8vw,28px);
+  margin-top:clamp(14px,1.8vw,18px);
   border-top:1px solid var(--edge);
 }
 #ecosystem .cards .card{
   border:0;border-bottom:1px solid var(--edge);border-radius:0;
-  background:transparent;padding:clamp(20px,2.8vw,30px) 0;
+  background:transparent;padding:clamp(14px,1.8vw,20px) 0;
   display:grid;grid-template-columns:minmax(220px,.85fr) 1.6fr;
   gap:6px clamp(20px,3vw,44px);align-items:baseline;
   transition:none;
