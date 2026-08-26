@@ -581,10 +581,32 @@ body{
 
   build();
   measure();
-  /* Land in the PRESENT. Opening at 1975 meant the first thing anyone saw was
-     44 years of empty span, which reads as unfinished rather than vast. From
-     TODAY the 1970s are behind you and Mars is ahead. */
-  x = target = clampX(PAD + frac(NOW) * SPANPX - innerWidth / 2);
+  /* Deep link: ?at=2021 opens centred on that milestone, ?at=start at the
+     beginning, ?at=end at the ending. A span you travel is exactly the kind of
+     page where you want to hand someone a moment rather than say "drag right
+     for a while", and it makes every position reachable without dragging at
+     all - which matters for anyone who cannot.
+     The year is validated and clamped: ?at=9999 lands at the end rather than
+     off the rail, ?at=anything-else parses to NaN and is ignored, and the value
+     is never written into the DOM. */
+  function deepLink(){
+    var m = /[?&]at=([^&]+)/.exec(location.search);
+    if (!m) return null;
+    var v = decodeURIComponent(m[1]).toLowerCase();
+    if (v === 'start') return 0;
+    if (v === 'end')   return maxX;
+    var y = parseInt(v, 10);
+    if (!y || y < ORIGIN || y > END) return null;
+    return clampX(PAD + frac(y) * SPANPX - innerWidth / 2);
+  }
+
+  /* Otherwise land in the PRESENT. Opening at 1975 meant the first thing anyone
+     saw was four empty decades, which reads as unfinished rather than vast.
+     From TODAY the 1970s are behind you and Mars is ahead. */
+  var LINKED = deepLink();
+  x = target = (LINKED === null)
+    ? clampX(PAD + frac(NOW) * SPANPX - innerWidth / 2)
+    : LINKED;
   paint();
 })();
 </script>
