@@ -119,7 +119,16 @@ body{
    halves the density where the milestones cluster. A stem ties each label
    back to its mark so the anchor is never ambiguous. */
 .stop{position:absolute;top:56%;transform:translate(-50%,-50%);text-align:center}
-.stop svg{display:block;overflow:visible;margin:0 auto}
+/* The glyphs ARE the imagery on this page - the only media the provenance
+   rules permit. They were fixed 54-66px marks on a 1536px screen: the media
+   budget existed and was barely spent. Sized here rather than by attribute so
+   they can grow as you arrive. */
+.stop svg{
+  display:block;overflow:visible;margin:0 auto;
+  width:clamp(74px,8.4vw,128px);height:auto;
+  transition:width .42s cubic-bezier(.22,.61,.36,1);
+}
+.stop.on svg{width:clamp(118px,15.5vw,232px)}
 .txt{
   position:absolute;left:50%;transform:translateX(-50%);
   width:max-content;max-width:21ch;text-align:center;
@@ -129,6 +138,28 @@ body{
 .txt::before{content:'';position:absolute;left:50%;width:1px;height:13px;background:var(--faint)}
 .stop.dn .txt::before{bottom:100%;margin-bottom:3px}
 .stop.up .txt::before{top:100%;margin-top:3px}
+/* The display year, shown only on the stop you have arrived at. Revelatio
+   runs 191.92px at weight 400 in one family - proof that size alone carries
+   hierarchy, and that 'one family, one weight' and 'enormous' are not in
+   tension. font-size collapses to 0 rather than display:none so it animates. */
+.disp{
+  display:block;font-family:var(--sans);font-weight:500;
+  font-size:0;line-height:0;letter-spacing:-.035em;color:var(--ink);
+  opacity:0;transform:translateY(5px);
+  transition:font-size .42s cubic-bezier(.22,.61,.36,1),line-height .42s,
+             opacity .34s ease,transform .42s cubic-bezier(.22,.61,.36,1);
+}
+.stop.on .disp{
+  font-size:clamp(44px,7vw,112px);line-height:.94;
+  opacity:1;transform:none;margin-bottom:10px;
+}
+.stop.on .txt{max-width:none}
+.stop.on{z-index:3}
+/* arriving brings one milestone forward and lets the rest recede - the
+   'approach an object, it opens' behaviour, and it is also what stops a 112px
+   year colliding with its neighbours' labels. */
+.stop{transition:opacity .4s ease}
+.rail.focusing .stop:not(.on){opacity:.24}
 .stop .yr{
   display:block;
   font:500 11px/1 var(--mono);letter-spacing:.2em;color:var(--muted);
@@ -297,6 +328,12 @@ body{
   var frac = function(y){ return (y - ORIGIN) / SPAN; };
 
   /* the drawn forms. no clip art: each is a line that means its own event. */
+  /* EXPLICIT, never derived. The Agency names no year for the NASA meeting, and
+     Space City is a range - deriving a number from either would invent the
+     precision this page exists to refuse. */
+  var BIG = {1975:'1970s', 2019:'2019', 2021:'2021', 2023:'2023',
+             2025:'2025', 2028:'2028', 2030:'2030s', 2117:'2117'};
+
   var MARKS = {
     contact: '<svg width="54" height="54" viewBox="0 0 54 54"><circle class="mark" cx="27" cy="27" r="5"/>'+
              '<path class="mark-soft" d="M27 22V4M27 32v18M22 27H4M32 27h18"/></svg>',
@@ -332,6 +369,8 @@ body{
   var SPANPX = Math.max(11000, innerWidth * 7);
   var WIDE = SPANPX + PAD * 2;
 
+  var STOPEL = [];   /* {el, at} in rail space - used to pick the focused stop */
+
   function build(){
     rail.style.width = WIDE + 'px';
     document.getElementById('ground').style.width = WIDE + 'px';
@@ -344,11 +383,13 @@ body{
       el.style.left = (PAD + frac(s.at) * SPANPX) + 'px';
       el.innerHTML = MARKS[s.mark] +
         '<span class="txt">' +
+          '<b class="disp">' + (BIG[s.at] || s.at) + '</b>' +
           '<b class="yr">' + s.yr + '</b>' +
           '<b class="nm">' + s.nm + '</b>' +
           '<b class="no">' + s.no + '</b>' +
         '</span>';
       rail.appendChild(el);
+      STOPEL.push({el:el, at:PAD + frac(s.at) * SPANPX});
     });
 
     /* today */
@@ -374,7 +415,7 @@ body{
   }
 
   /* ── travel ──────────────────────────────────────────────────────────── */
-  var x = 0, target = 0, maxX = 0, raf = 0;
+  var x = 0, target = 0, maxX = 0, raf = 0, FOCUS = null;
 
   function clampX(v){ return Math.max(0, Math.min(maxX, v)); }
 
@@ -389,6 +430,21 @@ body{
        starting in 1982, contradicting 'THE 1970s' on screen beneath it. */
     count.textContent = 'AT ' + (yr <= 1979 ? 'THE 1970s' : yr) + '  ·  SPAN 1970s–2117';
     if (document.activeElement !== scrub) scrub.value = Math.round(p * 1000);
+
+    /* whichever milestone is nearest the centre of the screen is the one you
+       have arrived at. Within roughly a quarter-screen, or nothing is focused -
+       crossing the empty stretches should feel empty. */
+    var centre = x + innerWidth / 2, near = null, best = innerWidth * 0.26;
+    for (var i = 0; i < STOPEL.length; i++) {
+      var d = Math.abs(STOPEL[i].at - centre);
+      if (d < best) { best = d; near = STOPEL[i].el; }
+    }
+    if (near !== FOCUS) {
+      if (FOCUS) FOCUS.classList.remove('on');
+      if (near) near.classList.add('on');
+      rail.classList.toggle('focusing', !!near);
+      FOCUS = near;
+    }
     if (x !== target) queue();
   }
   function queue(){ if (!raf) raf = requestAnimationFrame(paint); }
