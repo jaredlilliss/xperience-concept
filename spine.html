@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Span — XperienceSpace | Lilliss IT concept</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="An unsolicited Lilliss IT design concept. One screen: the UAE's space programme as a single span from the 1970s to 2117. Not affiliated with, endorsed by, or commissioned by the XperienceSpace Initiative. Not indexed.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Span — XperienceSpace | Lilliss IT concept">
+<meta property="og:description" content="An unsolicited design concept by Jared Lilliss (Lilliss IT). Not affiliated with, endorsed by, or commissioned by the XperienceSpace Initiative.">
+<meta property="og:site_name" content="Lilliss IT">
+<meta name="twitter:card" content="summary">
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     THE SPINE — step 1 of the XperienceSpace rebuild. Brief:
+     XPERIENCE-REBUILD-PLAN-2026-08-27.md
+
+     This is deliberately NOT a page. It is one screen you travel.
+
+     WHY IT EXISTS: the old page failed because it was a document — heading,
+     paragraph, scroll, repeat — while both of Jared's reference sites (k95.it,
+     ode.partners) are image-led and type-quiet. Measured, not described: 67
+     images between them, ~2,400 characters of copy, largest heading 32px.
+     The old page could never get there because build_v3.py forbids <img>
+     outright. Jared's ruling unlocked it: original imagery he owns is allowed.
+
+     TWO DECISIONS, both taken FROM THE CONTENT rather than from taste:
+
+     1. THE GROUND SHIFTS ALONG THE SPAN. Night-blue at the 1970s end, Mars-rust
+        at 2117. k95's power is one committed colour; here the colour carries the
+        journey, so travelling it feels like going somewhere.
+
+     2. TRUE DATE POSITIONS, NOT EVEN SPACING. Every milestone sits at its real
+        fraction of a 142-year span. The consequence is that everything clusters
+        between 31% and 46% — and then there is NOTHING until 2117. That vast
+        emptiness is the honest shape of the story and the most truthful thing
+        on the screen. Even spacing would have been a lie that looked tidier.
+
+     EVERY OBJECT TRACES TO A VERIFIED FACT (ATELIER-UAE-VERIFY-RULING-2026-08-26).
+     Nothing here is estimated, and the excluded set is excluded on purpose:
+     no 6/21/79 strategy structure (two official UAE sources contradict each
+     other), no Arkisys (a US company with no documented UAE tie), nothing whose
+     only source is a language model.
+
+     DEGRADES: with JavaScript off this is a plain vertical list carrying every
+     date, name and note. Spatial navigation that strands people is worse than
+     the page it replaces.
+     ═══════════════════════════════════════════════════════════════════════════ -->
+
+<style>
+/* Self-hosted. The estate loads nothing third-party; do not reintroduce a
+   Google Fonts request. Inter is VARIABLE (one file). */
+@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;
+  src:url('fonts/inter.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;
+  src:url('fonts/plexmono-400.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;
+  src:url('fonts/plexmono-500.woff2') format('woff2')}
+
+:root{
+  --near:#0C1A5E;      /* the 1970s end — night, Earth */
+  --far:#5A1F1A;       /* 2117 — Mars, rust */
+  --ink:#EEF1F8;
+  --muted:rgba(238,241,248,.52);
+  --faint:rgba(238,241,248,.26);
+  --line:rgba(238,241,248,.30);
+  --now:#F2C46A;
+  --sans:'Inter',ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--near);color:var(--ink);
+  font:400 15px/1.5 var(--sans);
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+
+/* ── the world ──────────────────────────────────────────────────────────── */
+.world{position:fixed;inset:0;overflow:hidden}
+.ground{
+  position:absolute;inset:0;
+  background:linear-gradient(100deg,var(--near) 0%,#141C56 26%,#2B1F4A 52%,#43203A 76%,var(--far) 100%);
+}
+.grain{
+  position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background:
+    radial-gradient(1px 1px at 18% 30%, rgba(255,255,255,.5), transparent),
+    radial-gradient(1px 1px at 62% 18%, rgba(255,255,255,.35), transparent),
+    radial-gradient(1px 1px at 82% 62%, rgba(255,255,255,.4), transparent),
+    radial-gradient(1px 1px at 36% 74%, rgba(255,255,255,.3), transparent),
+    radial-gradient(1px 1px at 8% 58%, rgba(255,255,255,.28), transparent),
+    radial-gradient(1px 1px at 92% 34%, rgba(255,255,255,.3), transparent);
+}
+
+/* ── the rail: everything is positioned along this ──────────────────────── */
+.rail{position:absolute;top:0;left:0;height:100%;will-change:transform}
+.line{
+  position:absolute;top:56%;left:0;height:1px;width:100%;
+  background:linear-gradient(90deg,var(--faint),var(--line) 30%,var(--line) 70%,rgba(242,196,106,.55));
+}
+
+.stop{position:absolute;top:56%;transform:translate(-50%,-50%);text-align:center}
+.stop svg{display:block;overflow:visible;margin:0 auto}
+.stop .yr{
+  display:block;margin-top:18px;
+  font:500 11px/1 var(--mono);letter-spacing:.2em;color:var(--muted);
+}
+.stop .nm{
+  display:block;margin-top:7px;max-width:19ch;
+  font:500 13px/1.3 var(--sans);letter-spacing:-.005em;color:var(--ink);
+}
+.stop .no{
+  display:block;margin-top:5px;max-width:22ch;
+  font:400 11px/1.4 var(--mono);color:var(--faint);
+}
+.stop.lost .nm{color:rgba(238,241,248,.68)}
+
+.mark{fill:none;stroke:var(--ink);stroke-width:1.25;stroke-linecap:round}
+.mark-soft{fill:none;stroke:var(--faint);stroke-width:1;stroke-dasharray:2 4}
+.mark-fill{fill:var(--ink);stroke:none}
+.mark-now{stroke:var(--now)}
+.fill-now{fill:var(--now)}
+.mark-far{stroke:#E08A6A}
+.fill-far{fill:#E08A6A}
+
+/* today */
+.today{position:absolute;top:0;height:100%;transform:translateX(-50%);pointer-events:none}
+.today i{position:absolute;top:0;left:50%;height:100%;width:1px;background:linear-gradient(180deg,transparent,rgba(242,196,106,.42) 34%,rgba(242,196,106,.42) 66%,transparent)}
+.today b{
+  position:absolute;top:calc(56% + 92px);left:50%;transform:translateX(-50%);
+  font:500 10.5px/1 var(--mono);letter-spacing:.24em;color:var(--now);white-space:nowrap;
+}
+
+/* the long emptiness gets one honest label rather than filler */
+.gap{
+  position:absolute;top:calc(56% - 74px);transform:translateX(-50%);
+  font:400 11px/1.5 var(--mono);letter-spacing:.16em;color:var(--faint);
+  text-align:center;white-space:nowrap;
+}
+
+/* ── chrome: almost none ────────────────────────────────────────────────── */
+.top{
+  position:fixed;top:0;left:0;right:0;z-index:5;
+  display:flex;align-items:baseline;justify-content:space-between;gap:20px;
+  padding:22px clamp(18px,3vw,34px);pointer-events:none;
+}
+.who{font:500 12px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase}
+.who span{color:var(--faint);display:block;margin-top:7px;font-size:10px;letter-spacing:.16em}
+.count{font:500 11px/1 var(--mono);letter-spacing:.18em;color:var(--muted)}
+
+.hint{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:5;
+  font:500 10.5px/1 var(--mono);letter-spacing:.24em;text-transform:uppercase;
+  color:var(--faint);pointer-events:none;
+  animation:fade 5s ease 3s forwards;
+}
+@keyframes fade{to{opacity:0}}
+
+.scrub{
+  position:fixed;left:clamp(18px,3vw,34px);right:clamp(18px,3vw,34px);bottom:0;height:44px;z-index:6;
+  display:flex;align-items:center;
+}
+.scrub input{
+  -webkit-appearance:none;appearance:none;width:100%;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,var(--faint),rgba(242,196,106,.5));outline:none;cursor:ew-resize;
+}
+.scrub input::-webkit-slider-thumb{
+  -webkit-appearance:none;width:11px;height:11px;border-radius:50%;
+  background:var(--ink);border:0;cursor:grab;
+}
+.scrub input::-moz-range-thumb{width:11px;height:11px;border-radius:50%;background:var(--ink);border:0}
+.scrub input:focus-visible{outline:2px solid var(--now);outline-offset:6px}
+
+.foot{
+  position:fixed;right:clamp(18px,3vw,34px);bottom:52px;z-index:5;
+  max-width:44ch;text-align:right;
+  font:400 10.5px/1.55 var(--mono);color:var(--faint);
+}
+
+/* ── no-JS: everything becomes a plain readable list ────────────────────── */
+.fallback{display:none}
+.no-js body{overflow:auto}
+.no-js .world,.no-js .hint,.no-js .scrub{display:none}
+.no-js .fallback{
+  display:block;max-width:66ch;margin:0 auto;padding:56px clamp(18px,4vw,28px) 80px;
+}
+.no-js .fallback h1{font-size:28px;font-weight:600;letter-spacing:-.02em;margin-bottom:10px}
+.no-js .fallback .sub{color:var(--muted);margin-bottom:34px}
+.no-js .fallback li{list-style:none;padding:16px 0;border-top:1px solid rgba(238,241,248,.14)}
+.no-js .fallback .y{font:500 11px/1 var(--mono);letter-spacing:.2em;color:var(--muted)}
+.no-js .fallback .n{display:block;margin-top:6px;font-weight:600}
+.no-js .fallback .d{display:block;margin-top:4px;color:var(--faint);font-size:13px}
+
+@media (prefers-reduced-motion:reduce){
+  .rail{transition:none!important}
+  .hint{animation:none}
+}
+</style>
+</head>
+<body class="no-js">
+<script>document.body.classList.remove('no-js')</script>
+
+<header class="top">
+  <p class="who">XperienceSpace<span>A Lilliss IT concept &middot; not affiliated</span></p>
+  <p class="count" id="count">1970s &rarr; 2117</p>
+</header>
+
+<div class="world" id="world">
+  <div class="ground"></div>
+  <div class="grain"></div>
+  <div class="rail" id="rail">
+    <div class="line"></div>
+  </div>
+</div>
+
+<p class="hint">drag &middot; scroll &middot; &larr; &rarr;</p>
+
+<div class="scrub">
+  <input type="range" id="scrub" min="0" max="1000" value="0"
+         aria-label="Travel the span from the 1970s to 2117">
+</div>
+
+<p class="foot">
+  An unsolicited concept restyling public content from xperiencespace.com.
+  Not affiliated with, endorsed by, or commissioned by the XperienceSpace
+  Initiative. Every date shown is sourced; nothing is estimated.
+</p>
+
+<!-- Everything above is enhancement. This is the page without JavaScript. -->
+<div class="fallback">
+  <h1>The Span</h1>
+  <p class="sub">The UAE&rsquo;s space programme, from the 1970s to 2117. Every date
+    below is drawn from a named primary source.</p>
+  <ul id="fb"></ul>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var REDUCED = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  /* ── THE FACTS. Every one verified 26/08/2026 against a named primary source
+        (ATELIER-UAE-VERIFY-RULING-2026-08-26.md). `at` is the real year, so
+        positions are true rather than tidy. `mark` names the drawn form; each
+        one means something about its own event rather than decorating it. ── */
+  var ORIGIN = 1975, END = 2117;
+  var STOPS = [
+    {at:1975, yr:'THE 1970s', nm:'A meeting with NASA’s Apollo team',
+     no:'The Agency names no year', mark:'contact'},
+    {at:2019, yr:'11 MAR 2019', nm:'National Space Strategy 2030',
+     no:'Cabinet approved', mark:'frame'},
+    {at:2021, yr:'9 FEB 2021', nm:'Hope Probe enters Mars orbit',
+     no:'First Arab nation to reach Mars', mark:'orbit'},
+    {at:2023, yr:'26 APR 2023', nm:'Rashid‑1', no:'Lost. Debris imaged at the landing site',
+     mark:'descent', lost:true},
+    {at:2025, yr:'14 JAN 2025', nm:'MBZ‑Sat', no:'MBRSC’s largest imaging satellite',
+     mark:'track'},
+    {at:2028, yr:'2028', nm:'Emirates Mission to the Asteroid Belt',
+     no:'Launch', mark:'loop'},
+    {at:2030, yr:'2030–2040', nm:'UAE Space City', no:'Build phase', mark:'plan'},
+    {at:2117, yr:'2117', nm:'Mars', no:'The horizon', mark:'mars', far:true}
+  ];
+
+  var NOW = new Date().getFullYear();
+  var SPAN = END - ORIGIN;
+  var frac = function(y){ return (y - ORIGIN) / SPAN; };
+
+  /* the drawn forms. no clip art: each is a line that means its own event. */
+  var MARKS = {
+    contact: '<svg width="54" height="54" viewBox="0 0 54 54"><circle class="mark" cx="27" cy="27" r="5"/>'+
+             '<path class="mark-soft" d="M27 22V4M27 32v18M22 27H4M32 27h18"/></svg>',
+    frame:   '<svg width="54" height="54" viewBox="0 0 54 54"><path class="mark" d="M14 12h-6v30h6M40 12h6v30h-6"/>'+
+             '<path class="mark-soft" d="M27 16v22"/></svg>',
+    orbit:   '<svg width="60" height="54" viewBox="0 0 60 54"><ellipse class="mark" cx="30" cy="27" rx="26" ry="11"/>'+
+             '<circle class="mark-fill" cx="30" cy="27" r="3.5"/><circle class="mark-fill" cx="56" cy="27" r="2"/></svg>',
+    descent: '<svg width="54" height="54" viewBox="0 0 54 54"><path class="mark" d="M6 6C18 18 26 28 32 38"/>'+
+             '<path class="mark-soft" d="M4 46h46"/><path class="mark" d="M28 42l8 8M36 42l-8 8"/></svg>',
+    track:   '<svg width="62" height="54" viewBox="0 0 62 54"><path class="mark" d="M4 34C14 16 24 16 31 27s17 11 27-7"/>'+
+             '<circle class="mark-fill" cx="31" cy="27" r="2.5"/></svg>',
+    loop:    '<svg width="62" height="54" viewBox="0 0 62 54"><path class="mark" d="M6 40C6 18 26 8 40 18s10 26-4 26-16-16-4-22"/>'+
+             '<circle class="mark-fill" cx="56" cy="16" r="2"/></svg>',
+    plan:    '<svg width="58" height="54" viewBox="0 0 58 54"><path class="mark" d="M8 16h42v26H8z"/>'+
+             '<path class="mark-soft" d="M22 16v26M36 16v26M8 29h42"/></svg>',
+    mars:    '<svg width="66" height="66" viewBox="0 0 66 66"><circle class="mark mark-far" cx="33" cy="33" r="19"/>'+
+             '<path class="mark-soft" d="M14 33h38"/><circle class="fill-far" cx="33" cy="33" r="4"/></svg>'
+  };
+
+  var rail = document.getElementById('rail');
+  var world = document.getElementById('world');
+  var scrub = document.getElementById('scrub');
+  var count = document.getElementById('count');
+
+  /* the span is deliberately much wider than the screen: travelling it should
+     take real distance, because the subject is 142 years long. */
+  var WIDE = Math.max(6400, innerWidth * 4.2);
+
+  function build(){
+    rail.style.width = WIDE + 'px';
+
+    STOPS.forEach(function(s){
+      var el = document.createElement('div');
+      el.className = 'stop' + (s.lost ? ' lost' : '');
+      el.style.left = (frac(s.at) * WIDE) + 'px';
+      el.innerHTML = MARKS[s.mark] +
+        '<b class="yr">' + s.yr + '</b>' +
+        '<b class="nm">' + s.nm + '</b>' +
+        '<b class="no">' + s.no + '</b>';
+      rail.appendChild(el);
+    });
+
+    /* today */
+    var t = document.createElement('div');
+    t.className = 'today';
+    t.style.left = (frac(NOW) * WIDE) + 'px';
+    t.innerHTML = '<i></i><b>TODAY &middot; ' + NOW + '</b>';
+    rail.appendChild(t);
+
+    /* the emptiness, labelled honestly rather than filled */
+    var a = frac(2030), b = frac(2117);
+    var g = document.createElement('p');
+    g.className = 'gap';
+    g.style.left = ((a + b) / 2 * WIDE) + 'px';
+    g.textContent = (2117 - 2040) + ' YEARS WITH NOTHING SCHEDULED IN THEM';
+    rail.appendChild(g);
+  }
+
+  /* ── travel ──────────────────────────────────────────────────────────── */
+  var x = 0, target = 0, maxX = 0, raf = 0;
+
+  function clampX(v){ return Math.max(0, Math.min(maxX, v)); }
+
+  function paint(){
+    raf = 0;
+    x += (target - x) * (REDUCED ? 1 : 0.12);
+    if (Math.abs(target - x) < 0.5) x = target;
+    rail.style.transform = 'translateX(' + (-x) + 'px)';
+    var p = maxX ? x / maxX : 0;
+    var yr = Math.round(ORIGIN + p * SPAN);
+    count.textContent = yr <= 1979 ? '1970s → 2117' : yr + ' → 2117';
+    if (document.activeElement !== scrub) scrub.value = Math.round(p * 1000);
+    if (x !== target) queue();
+  }
+  function queue(){ if (!raf) raf = requestAnimationFrame(paint); }
+  function go(v){ target = clampX(v); queue(); }
+
+  function measure(){
+    maxX = Math.max(0, WIDE - innerWidth + 240);
+    target = clampX(target); x = clampX(x); queue();
+  }
+
+  world.addEventListener('wheel', function(e){
+    var d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    if (!d) return;
+    e.preventDefault();
+    go(target + d * 1.5);
+  }, {passive:false});
+
+  var down = false, startX = 0, startT = 0;
+  world.addEventListener('pointerdown', function(e){
+    down = true; startX = e.clientX; startT = target;
+    world.setPointerCapture(e.pointerId);
+  });
+  world.addEventListener('pointermove', function(e){
+    if (!down) return;
+    go(startT - (e.clientX - startX) * 1.6);
+  });
+  ['pointerup','pointercancel'].forEach(function(ev){
+    world.addEventListener(ev, function(){ down = false; });
+  });
+
+  addEventListener('keydown', function(e){
+    var step = innerWidth * 0.55;
+    if (e.key === 'ArrowRight'){ e.preventDefault(); go(target + step); }
+    else if (e.key === 'ArrowLeft'){ e.preventDefault(); go(target - step); }
+    else if (e.key === 'Home'){ e.preventDefault(); go(0); }
+    else if (e.key === 'End'){ e.preventDefault(); go(maxX); }
+  });
+
+  scrub.addEventListener('input', function(){
+    target = x = clampX(scrub.value / 1000 * maxX);
+    queue();
+  });
+
+  addEventListener('resize', measure, {passive:true});
+
+  /* ── the no-JS list is built from the same data, so it can never drift ── */
+  var fb = document.getElementById('fb');
+  STOPS.forEach(function(s){
+    var li = document.createElement('li');
+    li.innerHTML = '<span class="y">' + s.yr + '</span>' +
+                   '<span class="n">' + s.nm + '</span>' +
+                   '<span class="d">' + s.no + '</span>';
+    fb.appendChild(li);
+  });
+
+  build();
+  measure();
+  paint();
+})();
+</script>
+</body>
+</html>
