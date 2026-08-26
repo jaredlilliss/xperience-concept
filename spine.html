@@ -86,6 +86,16 @@ body{
   position:absolute;top:0;left:0;height:100%;
   background:linear-gradient(100deg,var(--near) 0%,#141C56 22%,#2B1F4A 48%,#43203A 74%,var(--far) 100%);
 }
+/* Horizon glow and vignette. Without these the top and bottom thirds of the
+   frame were dead space and the emptiness read as BLANK rather than as SPACE.
+   The vignette also darkens behind the fixed chrome, which is why the header
+   and footer sit more comfortably. All drawn - no image asset. */
+.haze{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(128% 44% at 50% 56%, rgba(255,255,255,.085), transparent 68%),
+    linear-gradient(180deg, rgba(0,0,0,.34) 0%, transparent 30%, transparent 60%, rgba(0,0,0,.46) 100%);
+}
 .grain{
   position:absolute;inset:0;pointer-events:none;opacity:.5;
   background:
@@ -183,10 +193,10 @@ body{
   background:linear-gradient(90deg,var(--faint),rgba(242,196,106,.5));outline:none;cursor:ew-resize;
 }
 .scrub input::-webkit-slider-thumb{
-  -webkit-appearance:none;width:11px;height:11px;border-radius:50%;
-  background:var(--ink);border:0;cursor:grab;
+  -webkit-appearance:none;width:2px;height:15px;border-radius:1px;
+  background:var(--now);border:0;cursor:grab;
 }
-.scrub input::-moz-range-thumb{width:11px;height:11px;border-radius:50%;background:var(--ink);border:0}
+.scrub input::-moz-range-thumb{width:2px;height:15px;border-radius:1px;background:var(--now);border:0}
 .scrub input:focus-visible{outline:2px solid var(--now);outline-offset:6px}
 
 .foot{
@@ -220,15 +230,18 @@ body{
 
 <header class="top">
   <p class="who">XperienceSpace<span>A Lilliss IT concept &middot; not affiliated</span></p>
-  <p class="count" id="count">1970s &rarr; 2117</p>
+  <p class="count" id="count">SPAN 1970s&ndash;2117</p>
 </header>
 
 <div class="world" id="world">
-  <div class="grain"></div>
   <div class="rail" id="rail">
     <div class="ground" id="ground"></div>
     <div class="line"></div>
   </div>
+  <!-- stars sit ABOVE the ground. When .ground moved into .rail it became an
+       opaque gradient painted over .grain, and the starfield silently vanished. -->
+  <div class="grain"></div>
+  <div class="haze"></div>
 </div>
 
 <p class="hint">drag &middot; scroll &middot; &larr; &rarr;</p>
@@ -345,13 +358,19 @@ body{
     t.innerHTML = '<i></i><b>TODAY &middot; ' + NOW + '</b>';
     rail.appendChild(t);
 
-    /* the emptiness, labelled honestly rather than filled */
-    var a = frac(2030), b = frac(2117);
-    var g = document.createElement('p');
-    g.className = 'gap';
-    g.style.left = (PAD + (a + b) / 2 * SPANPX) + 'px';
-    g.textContent = (2117 - 2040) + ' YEARS WITH NOTHING SCHEDULED IN THEM';
-    rail.appendChild(g);
+    /* Both voids get labelled, honestly, rather than filled.
+       NOTE ON THE FIRST ONE: the Agency names no year for the NASA meeting, so
+       this page must NOT compute a span from it - 'NOTHING SOURCED IN BETWEEN'
+       is a statement about this page's own evidence, not about the UAE. */
+    [[1975, 2019, 'NOTHING SOURCED IN BETWEEN'],
+     [2040, 2117, (2117 - 2040) + ' YEARS WITH NOTHING SCHEDULED IN THEM']
+    ].forEach(function(gp){
+      var g = document.createElement('p');
+      g.className = 'gap';
+      g.style.left = (PAD + (frac(gp[0]) + frac(gp[1])) / 2 * SPANPX) + 'px';
+      g.textContent = gp[2];
+      rail.appendChild(g);
+    });
   }
 
   /* ── travel ──────────────────────────────────────────────────────────── */
@@ -366,7 +385,9 @@ body{
     rail.style.transform = 'translateX(' + (-x) + 'px)';
     var p = maxX ? Math.min(1, Math.max(0, (x + innerWidth / 2 - PAD) / SPANPX)) : 0;
     var yr = Math.round(ORIGIN + p * SPAN);
-    count.textContent = yr <= 1979 ? '1970s → 2117' : yr + ' → 2117';
+    /* This is a POSITION, not a range. Written as an arrow it read as a span
+       starting in 1982, contradicting 'THE 1970s' on screen beneath it. */
+    count.textContent = 'AT ' + (yr <= 1979 ? 'THE 1970s' : yr) + '  ·  SPAN 1970s–2117';
     if (document.activeElement !== scrub) scrub.value = Math.round(p * 1000);
     if (x !== target) queue();
   }
@@ -425,6 +446,10 @@ body{
 
   build();
   measure();
+  /* Land in the PRESENT. Opening at 1975 meant the first thing anyone saw was
+     44 years of empty span, which reads as unfinished rather than vast. From
+     TODAY the 1970s are behind you and Mars is ahead. */
+  x = target = clampX(PAD + frac(NOW) * SPANPX - innerWidth / 2);
   paint();
 })();
 </script>
