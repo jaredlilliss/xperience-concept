@@ -560,7 +560,7 @@ body[data-aud] section[data-key].relevant > .shell > .sec-k::after{
 
 .human{
   position:relative;overflow:hidden;
-  padding:clamp(64px,10vw,132px) 0;
+  padding:clamp(44px,5.5vw,78px) 0;
   border-block:1px solid var(--edge);
   background:
     radial-gradient(70% 130% at 18% 0%, rgba(233,188,106,.13), transparent 62%),
@@ -581,18 +581,25 @@ body[data-aud] section[data-key].relevant > .shell > .sec-k::after{
 @supports not (-webkit-background-clip:text){.human .say .warm{color:#F0A07A}}
 
 .human .who{
-  margin-top:clamp(22px,3vw,34px);
+  margin-top:clamp(18px,2.2vw,26px);
   display:flex;gap:8px;flex-wrap:wrap;
 }
-.human .who span{
+.human .who button{
   font:500 14px/1 var(--sans);color:var(--ink);
   padding:10px 16px;border-radius:999px;
-  border:1px solid rgba(233,188,106,.28);
+  border:1px solid rgba(233,188,106,.34);
   background:linear-gradient(180deg,rgba(233,188,106,.10),rgba(233,137,159,.05));
+  cursor:pointer;transition:border-color .2s,transform .2s,background .2s;
 }
+.human .who button:hover{
+  border-color:rgba(233,188,106,.75);transform:translateY(-1px);
+  background:linear-gradient(180deg,rgba(233,188,106,.20),rgba(233,137,159,.10));
+}
+.human .who button:focus-visible{outline:2px solid #E9BC6A;outline-offset:3px}
+.human .who button:active{transform:translateY(0)}
 
 .human .then{
-  margin-top:clamp(22px,3vw,32px);
+  margin-top:clamp(18px,2.2vw,26px);
   color:var(--muted);max-width:62ch;
   font-size:clamp(15px,1.6vw,17px);line-height:1.62;
 }
@@ -601,13 +608,13 @@ body[data-aud] section[data-key].relevant > .shell > .sec-k::after{
 /* a soft horizon glow low in the band — warm, and the only place on the page
    that is not cool blue */
 .human::after{
-  content:"";position:absolute;left:50%;bottom:-58%;transform:translateX(-50%);
-  width:120%;height:100%;border-radius:50%;pointer-events:none;
+  content:"";position:absolute;left:50%;bottom:-30%;transform:translateX(-50%);
+  width:110%;height:62%;border-radius:50%;pointer-events:none;
   background:radial-gradient(closest-side, rgba(240,160,122,.10), transparent 72%);
 }
 
 @media (max-width:640px){
-  .human .who span{font-size:13px;padding:8px 13px}
+  .human .who button{font-size:13px;padding:8px 13px}
 }
 
 </style>
@@ -1077,7 +1084,7 @@ body[data-aud] section[data-key].relevant > .shell > .sec-k::after{
     <div class="shell">
       <p class="say rv">A space for Emiratis to <span class="warm">touch their dreams</span>.</p>
       <div class="who rv">
-        <span>Youth</span><span>Families</span><span>Professionals</span><span>Creators</span>
+        <button type="button" data-goto="education">Youth</button><button type="button" data-goto="community">Families</button><button type="button" data-goto="partner">Professionals</button><button type="button" data-goto="community">Creators</button>
       </div>
       <p class="then rv">A national movement where youth, families, professionals and creators
         participate in UAE space initiatives. <b>Whether you are a student, educator, entrepreneur,
@@ -1899,6 +1906,19 @@ document.body.classList.remove('no-js');document.body.classList.add('js');
   var saved = null; try { saved = localStorage.getItem('xs-aud'); } catch(e){}
   var initial = (q && AUD[q]) ? q : ((saved && AUD[saved]) ? saved : null);
   if (initial) apply(initial, false);
+
+  /* ── the human band's pills, wired to this same switcher ──────────────────
+     They were inert <span>s that looked exactly like these buttons. Rather than
+     re-implement anything, each one triggers the real control, so URL push,
+     localStorage, aria-pressed and relevance marking all happen once, here. */
+  var human = document.querySelectorAll('.human .who [data-goto]');
+  Array.prototype.forEach.call(human, function(el){
+    el.addEventListener('click', function(){
+      var real = document.querySelector('.aud-opts [data-k="' + el.dataset.goto + '"]');
+      if (real) real.click();
+    });
+  });
+
 })();
 
 </script>
