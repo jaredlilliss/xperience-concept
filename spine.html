@@ -115,7 +115,7 @@ body{
 /* ── the rail: everything is positioned along this ──────────────────────── */
 .rail{position:absolute;top:0;left:0;height:100%;will-change:transform}
 .line{
-  position:absolute;top:56%;left:0;height:1px;width:100%;
+  position:absolute;top:56%;left:0;height:1px;
   background:linear-gradient(90deg,var(--faint),var(--line) 30%,var(--line) 70%,rgba(242,196,106,.55));
 }
 
@@ -316,7 +316,7 @@ body{
 <div class="world" id="world">
   <div class="rail" id="rail">
     <div class="ground" id="ground"></div>
-    <div class="line"></div>
+    <div class="line" id="line"></div>
   </div>
   <!-- stars sit ABOVE the ground. When .ground moved into .rail it became an
        opaque gradient painted over .grain, and the starfield silently vanished. -->
@@ -445,6 +445,10 @@ body{
 
   function build(){
     rail.style.width = WIDE + 'px';
+    /* the line IS the span, so it ends at 2117 rather than running the full
+       rail. It was striking through the ending's text; stopping it there also
+       marks where the subject ends and the author begins. */
+    document.getElementById('line').style.width = (PAD + SPANPX) + 'px';
     /* wider than the rail on purpose: measure() allows 240px of overtravel past
        WIDE, and without the margin the body background shows through as a hard
        navy strip at the Mars end. */
