@@ -128,7 +128,7 @@ body{
   width:clamp(74px,8.4vw,128px);height:auto;
   transition:width .42s cubic-bezier(.22,.61,.36,1);
 }
-.stop.on svg{width:clamp(118px,15.5vw,232px)}
+.stop.on svg{width:clamp(112px,min(15.5vw,29vh),232px)}
 .txt{
   position:absolute;left:50%;transform:translateX(-50%);
   width:max-content;max-width:21ch;text-align:center;
@@ -142,16 +142,24 @@ body{
    runs 191.92px at weight 400 in one family - proof that size alone carries
    hierarchy, and that 'one family, one weight' and 'enormous' are not in
    tension. font-size collapses to 0 rather than display:none so it animates. */
+/* The display year sits on the OPPOSITE side of the horizon from its label, so
+   the stop straddles the line rather than stacking under it. Stacked, a 107px
+   year pushed the focused block off a 750px viewport and collided with the
+   TODAY marker. Straddling also fills the dead top third of the frame.
+   Sized against HEIGHT as well as width - a width-only clamp is what overflowed. */
 .disp{
-  display:block;font-family:var(--sans);font-weight:500;
+  position:absolute;left:50%;white-space:nowrap;
+  font-family:var(--sans);font-weight:500;
   font-size:0;line-height:0;letter-spacing:-.035em;color:var(--ink);
-  opacity:0;transform:translateY(5px);
+  opacity:0;transform:translateX(-50%) translateY(6px);
   transition:font-size .42s cubic-bezier(.22,.61,.36,1),line-height .42s,
              opacity .34s ease,transform .42s cubic-bezier(.22,.61,.36,1);
 }
+.stop.dn .disp{bottom:100%;margin-bottom:20px}
+.stop.up .disp{top:100%;margin-top:20px}
 .stop.on .disp{
-  font-size:clamp(44px,7vw,112px);line-height:.94;
-  opacity:1;transform:none;margin-bottom:10px;
+  font-size:clamp(42px,min(7vw,13vh),108px);line-height:.94;
+  opacity:1;transform:translateX(-50%);
 }
 .stop.on .txt{max-width:none}
 .stop.on{z-index:3}
@@ -382,8 +390,8 @@ body{
       el.className = 'stop ' + (i % 2 ? 'up' : 'dn') + (s.lost ? ' lost' : '');
       el.style.left = (PAD + frac(s.at) * SPANPX) + 'px';
       el.innerHTML = MARKS[s.mark] +
+        '<b class="disp">' + (BIG[s.at] || s.at) + '</b>' +
         '<span class="txt">' +
-          '<b class="disp">' + (BIG[s.at] || s.at) + '</b>' +
           '<b class="yr">' + s.yr + '</b>' +
           '<b class="nm">' + s.nm + '</b>' +
           '<b class="no">' + s.no + '</b>' +
