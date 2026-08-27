@@ -221,6 +221,22 @@ body{
 }
 
 /* the long emptiness gets one honest label rather than filler */
+/* THE RECORD STEMS. A different object class from a milestone and it must stay
+   that way: hairline, no glyph, no focus swell, always below the horizon. If a
+   stem competed with a milestone the page would lose its hierarchy, and the
+   five-milestones-in-697px cluster that forced the label stagger would worsen. */
+.stem{position:absolute;top:56%;transform:translateX(-50%);text-align:center;
+  width:max-content;max-width:16ch;pointer-events:auto}
+.stem i{display:block;width:1px;height:34px;margin:0 auto;
+  background:linear-gradient(180deg,rgba(238,241,248,.40),rgba(238,241,248,.10))}
+.stem .sy{display:block;margin-top:8px;font:500 10px/1 var(--mono);
+  letter-spacing:.18em;color:var(--muted)}
+.stem .sn{display:block;margin-top:5px;font:400 11px/1.3 var(--sans);color:var(--faint)}
+.stem .ss{display:block;margin-top:5px;font:400 9px/1.4 var(--mono);color:var(--faint);
+  opacity:0;max-height:0;overflow:hidden;visibility:hidden;
+  transition:opacity .3s ease,max-height .3s ease,visibility .3s}
+.stem:hover .ss,.stem:focus-within .ss{opacity:.9;max-height:4em;visibility:visible}
+.stem .ss a{color:var(--muted)}
 /* the ending - quiet, and the only place on the span that asks for anything */
 .ending{
   position:absolute;top:56%;transform:translate(-50%,-50%);
@@ -372,6 +388,8 @@ body{
        re-run scratchpad/atelier/fix_spine_nojs.py or the two WILL drift. -->
     <ul id="fb">
       <li><span class="y">THE 1970s</span><span class="n">A meeting with NASA’s Apollo team</span><span class="d">The Agency names no year</span><span class="s">Source: <a href="https://uaecabinet.ae/en/details/news/mohammed-bin-rashid-witnesses-launch-of-strategic-plans-of-uae-space-agency" target="_blank" rel="noopener noreferrer">UAE Cabinet portal ↗</a></span></li>
+      <li class="rec"><span class="y">2009</span><span class="n">DubaiSat‑1</span><span class="d">MBRSC satellite programme</span><span class="s">Source: <a href="https://www.mbrsc.ae/satellites/" target="_blank" rel="noopener noreferrer">MBRSC satellite programme ↗</a></span></li>
+      <li class="rec"><span class="y">2013</span><span class="n">DubaiSat‑2</span><span class="d">MBRSC satellite programme</span><span class="s">Source: <a href="https://www.mbrsc.ae/satellites/" target="_blank" rel="noopener noreferrer">MBRSC satellite programme ↗</a></span></li>
       <li><span class="y">11 MAR 2019</span><span class="n">National Space Strategy 2030</span><span class="d">Cabinet approved</span><span class="s">Source: <a href="https://mediaoffice.ae/en/news/2019/3/UAE-Cabinet-approves-National-Space-Strategy-2030" target="_blank" rel="noopener noreferrer">UAE Government Media Office ↗</a></span></li>
       <li><span class="y">9 FEB 2021</span><span class="n">Hope Probe enters Mars orbit</span><span class="d">First Arab nation to reach Mars</span><span class="s">Source: <a href="https://www.mbrsc.ae/about/" target="_blank" rel="noopener noreferrer">MBRSC ↗</a></span></li>
       <li><span class="y">25 APR 2023</span><span class="n">Rashid‑1</span><span class="d">Lost — the lander failed to touch down</span><span class="s">Source: MBRSC — Emirates Lunar Mission</span></li>
@@ -412,6 +430,16 @@ body{
   var frac = function(y){ return (y - ORIGIN) / SPAN; };
 
   /* the drawn forms. no clip art: each is a line that means its own event. */
+  /* THE RECORD. Sourced facts the page owns and had never drawn - a different
+     object class from a milestone: hairlines, no focus, no swell. Both are in
+     the 26/08 ruling's verified table on ONE source, mbrsc.ae/satellites/.
+     Two, deliberately, not eight: this tests whether a stem reads as WORK
+     before six more follow. */
+  var RECORD = [
+    {at:2009, nm:'DubaiSat‑1'},
+    {at:2013, nm:'DubaiSat‑2'}
+  ];
+
   /* EXPLICIT, never derived. The Agency names no year for the NASA meeting, and
      Space City is a range - deriving a number from either would invent the
      precision this page exists to refuse. */
@@ -427,6 +455,8 @@ body{
     2019:['UAE Government Media Office','https://mediaoffice.ae/en/news/2019/3/UAE-Cabinet-approves-National-Space-Strategy-2030'],
     2021:['MBRSC','https://www.mbrsc.ae/about/'],
     2023:['MBRSC — Emirates Lunar Mission',''],
+    2009:['MBRSC satellite programme','https://www.mbrsc.ae/satellites/'],
+    2013:['MBRSC satellite programme','https://www.mbrsc.ae/satellites/'],
     2025:['MBRSC satellite programme','https://www.mbrsc.ae/satellites/'],
     2028:['u.ae — Projects of the 50','https://u.ae/en/about-the-uae/uae-in-the-future/projects-of-the-50/emirati-interplanetary-mission-2028'],
     2117:['u.ae — the UAE in the future','https://u.ae/en/about-the-uae/uae-in-the-future/uae-future']
@@ -542,6 +572,20 @@ body{
       '<p class="sig">Jared Lilliss &middot; Lilliss IT</p>';
     rail.appendChild(e);
 
+    /* the record stems, drawn quieter than the milestones */
+    RECORD.forEach(function(r){
+      var el = document.createElement('div');
+      el.className = 'stem';
+      el.setAttribute('role', 'listitem');
+      el.setAttribute('aria-label', r.at + '. ' + r.nm + '. MBRSC satellite programme.');
+      el.style.left = (PAD + frac(r.at) * SPANPX) + 'px';
+      el.innerHTML = '<i></i>' +
+        '<b class="sy">' + r.at + '</b>' +
+        '<b class="sn">' + r.nm + '</b>' +
+        '<b class="ss">' + srcHTML(r.at) + '</b>';
+      rail.appendChild(el);
+    });
+
     /* THE VOIDS ARE DELIBERATELY UNLABELLED.
        They used to carry "NOTHING SOURCED IN BETWEEN" (1975-2019) and
        "89 YEARS · NOTHING ELSE SOURCED IN BETWEEN" (2028-2117). BOTH WERE
@@ -572,6 +616,7 @@ body{
     /* narrow screens drop the span half - it will not fit beside the wordmark in
        339px. The PROVENANCE sub-line is never touched at any width. */
     var lbl = (yr <= 1979 ? 'THE 1970s' : yr);
+    /* the readout counts what is DRAWN, milestones + record */
     count.textContent = innerWidth < 620 ? ('AT ' + lbl)
                                          : ('AT ' + lbl + '  ·  SPAN 1970s–2117');
     if (document.activeElement !== scrub) scrub.value = Math.round(p * 1000);
