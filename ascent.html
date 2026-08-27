@@ -157,6 +157,15 @@ section.wp{overflow:clip}
 /* reveal choreography */
 .rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.6,.2,1),transform .8s cubic-bezier(.2,.6,.2,1)}
 .rv.in{opacity:1;transform:none}
+/* A reveal container holding keyboard focus must be visible whatever the
+   observer has done - covers a screen reader's virtual cursor, find-in-page,
+   and restored focus, none of which scroll the way a mouse user does. */
+.rv:focus-within{opacity:1;transform:none}
+/* There was no :focus or :focus-visible rule on this page at all. Not a WCAG
+   failure - nothing reset the outline, so the UA default ring still showed -
+   but a default ring is easy to lose on a dark, custom-styled page. */
+:focus-visible{outline:2px solid var(--aurora);outline-offset:3px;border-radius:3px}
+.btn:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
 .rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}.rv.d4{transition-delay:.32s}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
 
@@ -208,7 +217,7 @@ h1.launch .row.ice{background:linear-gradient(95deg,#FFFFFF 12%,#B9E7FF 55%,#5FB
 .pillar{position:relative;border:1px solid var(--hair);border-radius:14px;background:var(--glass);padding:1.7rem 1.5rem 1.6rem;overflow:hidden;transition:transform .35s cubic-bezier(.2,.6,.2,1),border-color .35s,box-shadow .35s}
 @media (hover:hover){.pillar:hover{transform:translateY(-7px);border-color:var(--hair-2);box-shadow:0 24px 60px -30px rgba(143,227,255,.35)}}
 .pillar img{width:64px;height:64px;object-fit:contain;margin-bottom:1rem;filter:drop-shadow(0 0 14px rgba(143,227,255,.35))}
-.pillar h4{font-size:1.08rem;font-weight:700;margin-bottom:.55rem;letter-spacing:-.01em}
+.pillar h3{font-size:1.08rem;font-weight:700;margin-bottom:.55rem;letter-spacing:-.01em}
 .pillar p{color:var(--dim);font-size:.93rem}
 .pillars-wide{margin-top:1.1rem}
 
@@ -225,7 +234,7 @@ h1.launch .row.ice{background:linear-gradient(95deg,#FFFFFF 12%,#B9E7FF 55%,#5FB
 .phase:last-child::before{background:var(--mars);box-shadow:0 0 16px var(--mars)}
 .phase .yrs{font:700 clamp(1.6rem,4.6vw,3rem)/1 var(--mono);letter-spacing:-.02em;color:transparent;-webkit-text-stroke:1.2px rgba(233,188,106,.65)}
 .phase:last-child .yrs{-webkit-text-stroke:1.2px rgba(224,113,74,.8)}
-.phase h4{font-size:clamp(1.2rem,2.6vw,1.6rem);font-weight:700;margin:.5rem 0 .8rem;letter-spacing:-.015em}
+.phase h3{font-size:clamp(1.2rem,2.6vw,1.6rem);font-weight:700;margin:.5rem 0 .8rem;letter-spacing:-.015em}
 .phase ul{list-style:none;display:flex;flex-direction:column;gap:.45rem;max-width:70ch}
 .phase li{color:var(--dim);font-size:.97rem;padding-left:1.2rem;position:relative}
 .phase li::before{content:"—";position:absolute;left:0;color:var(--aurora)}
@@ -244,7 +253,7 @@ h1.launch .row.ice{background:linear-gradient(95deg,#FFFFFF 12%,#B9E7FF 55%,#5FB
 #gate .head-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(1.6rem,3.4vw,3rem);align-items:center}
 @media (max-width:900px){#gate .head-grid{grid-template-columns:1fr}}
 .threes{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.1rem;margin-top:2.6rem}
-.mini h4{font-size:1.06rem;font-weight:700;margin-bottom:.55rem}
+.mini h3{font-size:1.06rem;font-weight:700;margin-bottom:.55rem}
 .mini>p{color:var(--dim);font-size:.94rem;margin-bottom:.8rem}
 .mini ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
 .mini li{color:var(--dim);font-size:.9rem;padding-left:1.1rem;position:relative}
@@ -476,10 +485,10 @@ footer b{color:var(--dim)}
     <h2 class="sec rv d1">4 Pillars powering XperienceSpace</h2>
     <p class="sub rv d2">XperienceSpace initiative structures programs around four interdependent pillars. Each pillar channels community energy, builds capabilities, and supports UAE’s official space initiatives with practical, investment-ready mechanisms.</p>
     <div class="pillars">
-      <div class="pillar rv"><h4>Public Engagement &amp; Community</h4><p>Raising awareness and inspiring innovation by addressing Earth’s challenges, creating new opportunities for UAE’s growth in the space economy. A space for Emiratis to touch their dreams.</p></div>
-      <div class="pillar rv d1"><h4>Education &amp; Talent Pipeline</h4><p>Developing future leaders by applying UAE-driven solutions to global and space challenges, strengthening national expertise and resilience.</p></div>
-      <div class="pillar rv d2"><h4>Industry Development &amp; Support</h4><p>Creating initiatives to develop cutting-edge solutions addressing local and global needs, driving UAE’s leadership in space and hiTech industries.</p></div>
-      <div class="pillar rv d3"><h4>Research &amp; Development</h4><p>Developing products &amp; services needed to solve Earth’s sustainability challenges and build a competitive, future-ready space sector for UAE.</p></div>
+      <div class="pillar rv"><h3>Public Engagement &amp; Community</h3><p>Raising awareness and inspiring innovation by addressing Earth’s challenges, creating new opportunities for UAE’s growth in the space economy. A space for Emiratis to touch their dreams.</p></div>
+      <div class="pillar rv d1"><h3>Education &amp; Talent Pipeline</h3><p>Developing future leaders by applying UAE-driven solutions to global and space challenges, strengthening national expertise and resilience.</p></div>
+      <div class="pillar rv d2"><h3>Industry Development &amp; Support</h3><p>Creating initiatives to develop cutting-edge solutions addressing local and global needs, driving UAE’s leadership in space and hiTech industries.</p></div>
+      <div class="pillar rv d3"><h3>Research &amp; Development</h3><p>Developing products &amp; services needed to solve Earth’s sustainability challenges and build a competitive, future-ready space sector for UAE.</p></div>
     </div>
   </div>
 </section>
@@ -529,7 +538,7 @@ footer b{color:var(--dim)}
     <div class="timeline">
       <div class="phase rv">
         <div class="yrs">NOW–2030</div>
-        <h4>Foundation &amp; Awareness</h4>
+        <h3>Foundation &amp; Awareness</h3>
         <ul>
           <li>Launch UAE Space Welcome Center, virtual community, outreach programs and academies</li>
           <li>Create Special Economic Zone &amp; infrastructure</li>
@@ -539,7 +548,7 @@ footer b{color:var(--dim)}
       </div>
       <div class="phase rv d1">
         <div class="yrs">2030–2040</div>
-        <h4>UAE Space City &amp; Industry Scale-Up</h4>
+        <h3>UAE Space City &amp; Industry Scale-Up</h3>
         <ul>
           <li>Establish dedicated zones for advanced manufacturing, simulation, materials development, space medicine and logistics</li>
           <li>Develop residential &amp; tourism programs integrated with smart-city design</li>
@@ -548,7 +557,7 @@ footer b{color:var(--dim)}
       </div>
       <div class="phase rv d2">
         <div class="yrs">2040–2117</div>
-        <h4>Deep-Space Economy &amp; Mars-2117 Support</h4>
+        <h3>Deep-Space Economy &amp; Mars-2117 Support</h3>
         <ul>
           <li>Mature UAE as a strategic hub for deep-space missions, asteroid research, life support technologies and Mars infrastructure, with a diversified space-driven economy</li>
         </ul>
@@ -582,7 +591,7 @@ footer b{color:var(--dim)}
     </div>
     <div class="threes">
       <div class="mini card rv">
-        <h4>Immersive Experiences</h4>
+        <h3>Immersive Experiences</h3>
         <p>Interactive exhibits, mission simulators, planet environments and a rocket viewing gallery designed to make UAE’s space story tangible and memorable.</p>
         <ul>
           <li>Space museum &amp; story of UAE journey to space</li>
@@ -591,7 +600,7 @@ footer b{color:var(--dim)}
         </ul>
       </div>
       <div class="mini card rv d1">
-        <h4>Education &amp; Talent Pipeline</h4>
+        <h3>Education &amp; Talent Pipeline</h3>
         <p>A bridge between accredited education providers, industry partners and government programs — curating pathways into space-related careers.</p>
         <ul>
           <li>Workshops &amp; youth academies</li>
@@ -600,7 +609,7 @@ footer b{color:var(--dim)}
         </ul>
       </div>
       <div class="mini card rv d2">
-        <h4>Industry &amp; R&amp;D Collaboration</h4>
+        <h3>Industry &amp; R&amp;D Collaboration</h3>
         <p>A neutral collaboration zone connecting companies, investors and agencies to co-develop solutions for space from within UAE.</p>
         <ul>
           <li>Showcase of UAE-based technologies</li>
