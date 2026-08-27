@@ -225,9 +225,10 @@ body{
    that way: hairline, no glyph, no focus swell, always below the horizon. If a
    stem competed with a milestone the page would lose its hierarchy, and the
    five-milestones-in-697px cluster that forced the label stagger would worsen. */
-.stem{position:absolute;top:56%;transform:translate(-50%,-11px);text-align:center;
+.stem{position:absolute;top:56%;transform:translate(-50%,-20px);text-align:center;
   width:max-content;max-width:16ch;pointer-events:auto}
-.stem svg{display:block;margin:0 auto 2px;overflow:visible;opacity:.82}
+.stem svg{display:block;margin:0 auto 4px;overflow:visible;opacity:.86;
+  width:clamp(48px,4.4vw,68px);height:auto}
 .stem svg .mark{stroke-width:1}
 .stem i{display:block;width:1px;height:20px;margin:0 auto;
   background:linear-gradient(180deg,rgba(238,241,248,.40),rgba(238,241,248,.10))}
