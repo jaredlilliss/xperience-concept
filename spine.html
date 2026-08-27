@@ -240,6 +240,15 @@ body{
   transition:opacity .3s ease,max-height .3s ease,visibility .3s}
 .stem:hover .ss,.stem:focus-within .ss{opacity:.9;max-height:4em;visibility:visible}
 .stem .ss a{color:var(--muted)}
+/* COMPACT REGISTER - entered by measurement, see nearestGap(). A dense run of
+   small marks is also the honest picture of that decade: it WAS dense. */
+.stem.tight svg{width:clamp(28px,2.5vw,38px)}
+.stem.tight .sy{writing-mode:vertical-rl;text-orientation:mixed;
+  margin:7px auto 0;letter-spacing:.14em;font-size:9.5px}
+.stem.tight .sn{opacity:0;max-height:0;overflow:hidden;visibility:hidden;margin-top:0;
+  transition:opacity .3s ease,max-height .3s ease,visibility .3s}
+.stem.tight:hover .sn,.stem.tight:focus-within .sn{opacity:1;max-height:4em;
+  visibility:visible;margin-top:6px}
 /* the ending - quiet, and the only place on the span that asks for anything */
 .ending{
   position:absolute;top:56%;transform:translate(-50%,-50%);
@@ -393,8 +402,12 @@ body{
       <li><span class="y">THE 1970s</span><span class="n">A meeting with NASA’s Apollo team</span><span class="d">The Agency names no year</span><span class="s">Source: <a href="https://uaecabinet.ae/en/details/news/mohammed-bin-rashid-witnesses-launch-of-strategic-plans-of-uae-space-agency" target="_blank" rel="noopener noreferrer">UAE Cabinet portal ↗</a></span></li>
       <li><span class="y">2009</span><span class="n">DubaiSat‑1</span><span class="d">MBRSC satellite programme</span><span class="s">Source: <a href="https://www.mbrsc.ae/satellites/" target="_blank" rel="noopener noreferrer">MBRSC satellite programme ↗</a></span></li>
       <li><span class="y">2013</span><span class="n">DubaiSat‑2</span><span class="d">MBRSC satellite programme</span><span class="s">Source: <a href="https://www.mbrsc.ae/satellites/" target="_blank" rel="noopener noreferrer">MBRSC satellite programme ↗</a></span></li>
+      <li><span class="y">2017</span><span class="n">Nayif‑1</span><span class="d">MBRSC satellite programme</span><span class="s">Source: <a href="https://www.mbrsc.ae/satellites/" target="_blank" rel="noopener noreferrer">MBRSC satellite programme ↗</a></span></li>
+      <li><span class="y">2018</span><span class="n">KhalifaSat</span><span class="d">MBRSC satellite programme</span><span class="s">Source: <a href="https://www.mbrsc.ae/satellites/" target="_blank" rel="noopener noreferrer">MBRSC satellite programme ↗</a></span></li>
       <li><span class="y">11 MAR 2019</span><span class="n">National Space Strategy 2030</span><span class="d">Cabinet approved</span><span class="s">Source: <a href="https://mediaoffice.ae/en/news/2019/3/UAE-Cabinet-approves-National-Space-Strategy-2030" target="_blank" rel="noopener noreferrer">UAE Government Media Office ↗</a></span></li>
+      <li><span class="y">2020</span><span class="n">Hope Probe launch</span><span class="d">Emirates Mars Mission — launched July 2020</span><span class="s">Source: <a href="https://www.mbrsc.ae/about/" target="_blank" rel="noopener noreferrer">MBRSC ↗</a></span></li>
       <li><span class="y">9 FEB 2021</span><span class="n">Hope Probe enters Mars orbit</span><span class="d">First Arab nation to reach Mars</span><span class="s">Source: <a href="https://www.mbrsc.ae/about/" target="_blank" rel="noopener noreferrer">MBRSC ↗</a></span></li>
+      <li><span class="y">2022</span><span class="n">Rashid‑1 launch</span><span class="d">Emirates Lunar Mission — launched December 2022</span><span class="s">Source: MBRSC — Emirates Lunar Mission</span></li>
       <li><span class="y">25 APR 2023</span><span class="n">Rashid‑1</span><span class="d">Lost — the lander failed to touch down</span><span class="s">Source: MBRSC — Emirates Lunar Mission</span></li>
       <li><span class="y">14 JAN 2025</span><span class="n">MBZ‑Sat</span><span class="d">MBRSC’s national satellite programme</span><span class="s">Source: <a href="https://www.mbrsc.ae/satellites/" target="_blank" rel="noopener noreferrer">MBRSC satellite programme ↗</a></span></li>
       <li><span class="y">2028</span><span class="n">Emirates Mission to the Asteroid Belt</span><span class="d">Launch</span><span class="s">Source: <a href="https://u.ae/en/about-the-uae/uae-in-the-future/projects-of-the-50/emirati-interplanetary-mission-2028" target="_blank" rel="noopener noreferrer">u.ae — Projects of the 50 ↗</a></span></li>
@@ -446,6 +459,10 @@ body{
     /* u.ae, read directly 28/08: "first fly-by of a main asteroid belt object
        in 2030" and "final landing on an asteroid ... in 2033". The 2034 date
        reported elsewhere is NOT used - the primary source says 2033. */
+    {at:2017, nm:'Nayif‑1',                mk:'sat'},
+    {at:2018, nm:'KhalifaSat',             mk:'sat'},
+    {at:2020, nm:'Hope Probe launch',      mk:'lch'},
+    {at:2022, nm:'Rashid‑1 launch',        mk:'lch'},
     {at:2030, nm:'First main‑belt fly‑by', mk:'ast'},
     {at:2033, nm:'Landing on an asteroid',  mk:'ast'}
   ];
@@ -467,6 +484,10 @@ body{
     2023:['MBRSC — Emirates Lunar Mission',''],
     2009:['MBRSC satellite programme','https://www.mbrsc.ae/satellites/'],
     2013:['MBRSC satellite programme','https://www.mbrsc.ae/satellites/'],
+    2017:['MBRSC satellite programme','https://www.mbrsc.ae/satellites/'],
+    2018:['MBRSC satellite programme','https://www.mbrsc.ae/satellites/'],
+    2020:['MBRSC','https://www.mbrsc.ae/about/'],
+    2022:['MBRSC — Emirates Lunar Mission',''],
     2025:['MBRSC satellite programme','https://www.mbrsc.ae/satellites/'],
     2028:['u.ae — Projects of the 50','https://u.ae/en/about-the-uae/uae-in-the-future/projects-of-the-50/emirati-interplanetary-mission-2028'],
     2030:['u.ae — Projects of the 50','https://u.ae/en/about-the-uae/uae-in-the-future/projects-of-the-50/emirati-interplanetary-mission-2028'],
@@ -496,6 +517,12 @@ body{
   var STEMMARK_AST = '<svg width="34" height="20" viewBox="0 0 34 20">'+
     '<path class="mark" d="M12 4l7-1 6 4 1 7-5 4-8-1-4-6z"/>'+
     '<path class="mark-soft" d="M2 10h8M26 10h6"/></svg>';
+
+  /* An ascent, for launches. Neither a satellite nor an asteroid. */
+  var STEMMARK_LCH = '<svg width="34" height="20" viewBox="0 0 34 20">'+
+    '<path class="mark" d="M4 18C12 18 20 12 28 2"/>'+
+    '<circle class="mark-fill" cx="28" cy="2" r="2"/>'+
+    '<path class="mark-soft" d="M2 18h12"/></svg>';
 
   var MARKS = {
     contact: '<svg width="54" height="54" viewBox="0 0 54 54"><circle class="mark" cx="27" cy="27" r="5"/>'+
@@ -600,14 +627,30 @@ body{
       '<p class="sig">Jared Lilliss &middot; Lilliss IT</p>';
     rail.appendChild(e);
 
+    /* CROWDING IS MEASURED, NOT ASSUMED. 2017-2023 sit at 77px intervals, where
+       a horizontal stem label lands INSIDE its neighbour's and inside the 159px
+       milestone labels. Each stem measures its distance to the nearest other
+       dated item and drops to a compact register below 130px: smaller glyph,
+       vertical year, name held until hover. Nothing hardcoded, so it adapts if
+       the span width or the record changes. */
+    var ALLX = STOPS.concat(RECORD).map(function(o){ return PAD + frac(o.at) * SPANPX; });
+    function nearestGap(x){
+      var best = Infinity;
+      ALLX.forEach(function(v){ var d = Math.abs(v - x); if (d > 0.5 && d < best) best = d; });
+      return best;
+    }
+
     /* the record stems, drawn quieter than the milestones */
     RECORD.forEach(function(r){
       var el = document.createElement('div');
       el.className = 'stem';
       el.setAttribute('role', 'listitem');
       el.setAttribute('aria-label', r.at + '. ' + r.nm + '. MBRSC satellite programme.');
-      el.style.left = (PAD + frac(r.at) * SPANPX) + 'px';
-      el.innerHTML = (r.mk === 'ast' ? STEMMARK_AST : STEMMARK) + '<i></i>' +
+      var rx = PAD + frac(r.at) * SPANPX;
+      el.style.left = rx + 'px';
+      if (nearestGap(rx) < 130) el.classList.add('tight');
+      var mk = r.mk === 'ast' ? STEMMARK_AST : (r.mk === 'lch' ? STEMMARK_LCH : STEMMARK);
+      el.innerHTML = mk + '<i></i>' +
         '<b class="sy">' + r.at + '</b>' +
         '<b class="sn">' + r.nm + '</b>' +
         '<b class="ss">' + srcHTML(r.at) + '</b>';
