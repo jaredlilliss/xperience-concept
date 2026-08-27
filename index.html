@@ -1064,7 +1064,7 @@ body[data-aud] section.unfolded > .shell{
         <a class="btn btn-s" href="#pillars">Explore Programs</a>
       </div>
       <div class="pills">
-        <span class="pill">Supporting MARS-2117 &amp; long-term space economy</span>
+        <span class="pill">Inspired by the UAE’s Mars 2117 programme (MBRSC)</span>
         <span class="pill">Private investment &amp; partnership driven</span>
       </div>
 
@@ -1121,7 +1121,7 @@ body[data-aud] section.unfolded > .shell{
        argument. Three displays in a row is capability on show rather than a page
        that has decided what matters. This was the only redundant one of the three. -->
 
-  <div class="ticker" aria-hidden="true"><div class="ticker-track"><span>Hope Probe</span><span>Rashid Rover</span><span>Lunar Gateway contribution</span><span>Satellites</span><span>Asteroid &amp; deep-space ambitions</span><span>Food BIOME</span><span>Olympus</span><span>Eyes on Universe</span><span>MARS-2117</span><span>National Space Strategy 2030</span><span>Hope Probe</span><span>Rashid Rover</span><span>Lunar Gateway contribution</span><span>Satellites</span><span>Asteroid &amp; deep-space ambitions</span><span>Food BIOME</span><span>Olympus</span><span>Eyes on Universe</span><span>MARS-2117</span><span>National Space Strategy 2030</span></div></div>
+  <div class="ticker" aria-hidden="true"><div class="ticker-track"><span>Hope Probe</span><span>Rashid Rover</span><span>Lunar Gateway contribution</span><span>Satellites</span><span>Asteroid &amp; deep-space ambitions</span><span>Food BIOME</span><span>Olympus</span><span>Eyes on Universe</span><span>Mars 2117</span><span>National Space Strategy 2030</span><span>Hope Probe</span><span>Rashid Rover</span><span>Lunar Gateway contribution</span><span>Satellites</span><span>Asteroid &amp; deep-space ambitions</span><span>Food BIOME</span><span>Olympus</span><span>Eyes on Universe</span><span>Mars 2117</span><span>National Space Strategy 2030</span></div></div>
 
   <div class="shell">
     <div class="horizon">
@@ -1229,9 +1229,16 @@ body[data-aud] section.unfolded > .shell{
           <text class="reach-lab" x="900" y="42" text-anchor="middle">2117</text>
         </svg>
         <figcaption id="reach-cap">
-          Ninety-one years from here. The marker is today.
+          <span id="reach-yrs">91</span> years from here. The marker is today.
         </figcaption>
       </figure>
+      <script>/* 9: the SVG year label and the caption were HARDCODED to 2026 and
+         "Ninety-one", while the counter above them recomputed from new Date() — so
+         from 1 Jan 2027 the page would have contradicted itself. Both derive now. */
+      (function(){var y=new Date().getFullYear();
+        var l=document.querySelector(".reach-lab-now"); if(l) l.textContent=y;
+        var n=document.getElementById("reach-yrs"); if(n) n.textContent=(2117-y);
+      })();</script>
       <p class="then rv">A national movement where youth, families, professionals and creators
         participate in UAE space initiatives. <b>Whether you are a student, educator, entrepreneur,
         investor, technology developer or policymaker, there is a place for you inside UAE’s
@@ -1277,7 +1284,8 @@ body[data-aud] section.unfolded > .shell{
       <p class="sec-k rv">Strategic Trajectory</p>
       <h2 class="rv wipe">From programs to a fully functioning UAE Space City</h2>
       <p class="sec-sub rv">A phased roadmap converts ambition into visible assets — supporting UAE initatives, de-risking investment and aligning ecosystem maturity with national milestones.</p>
-      <p class="sec-sub rv">UAE Space City is a scalable, future-ready special economic zone developed as an industry and community focal point supporting the UAE vision for space. A smart city dedicated to innovation, education, enterprise and development of cutting-edge technologies, resources and investment in space and environment.</p>
+      <p class="sec-sub rv" style="border-left:2px solid rgba(255,255,255,.22);padding-left:14px;margin-bottom:18px"><b>These are concept programmes proposed by XperienceSpace</b>, an independent industry initiative. <b>They are not UAE government programmes</b>, and this page is not affiliated with the UAE Space Agency, MBRSC, or any UAE government body. The UAE’s own space economic zone is the Space Economic Zones Programme, first zone at Masdar City.</p>
+      <p class="sec-sub rv">UAE Space City is a concept proposed by XperienceSpace: a scalable, future-ready special economic zone developed as an industry and community focal point supporting the UAE vision for space. A smart city dedicated to innovation, education, enterprise and development of cutting-edge technologies, resources and investment in space and environment.</p>
       <div class="traj"><div class="traj-fill" aria-hidden="true"></div><div class="cards">
         <div class="phase rv">
           <div class="yr">NOW–2030</div>
@@ -1299,8 +1307,8 @@ body[data-aud] section.unfolded > .shell{
           </ul>
         </div>
         <div class="phase rv">
-          <div class="yr">2040–2117</div>
-          <h3>Deep-Space Economy &amp; Mars-2117 Support</h3>
+          <div class="yr">2040–2117</div><div class="lab" style="opacity:.66;font-size:11px;letter-spacing:.06em;margin-top:4px">Speculative concept phasing — not a UAE programme milestone. No UAE source publishes a 2040 boundary.</div>
+          <h3>Deep-Space Economy &amp; Mars 2117 Support</h3>
           <ul>
             <li>Mature UAE as a strategic hub for deep-space missions, asteroid research, life support technologies and Mars infrastructure, with a diversified space-driven economy</li>
           </ul>
@@ -1399,7 +1407,7 @@ body[data-aud] section.unfolded > .shell{
   <section class="closer">
     <div class="shell">
       <p class="sec-k rv">Destination · Mars</p>
-      <p class="closer-line rv">Supporting MARS-2117 &amp; long-term space economy — coordinated milestones towards a sustainable space economy &amp; Mars city vision.</p>
+      <p class="closer-line rv">Inspired by the UAE’s Mars 2117 programme (MBRSC) — coordinated milestones towards a sustainable space economy &amp; Mars city vision.</p>
     </div>
   </section>
 </main>
@@ -2150,7 +2158,9 @@ document.body.classList.remove('no-js');document.body.classList.add('js');
      2030  stated — "NOW–2030" (the "Aligned with…" chip was DELETED 26/08: on an
            unaffiliated page it read as endorsement by a foreign government)
      2040  stated — "2030–2040 UAE Space City & Industry Scale-Up"
-     2117  stated — "MARS-2117", "2040–2117 Deep-Space Economy"
+     2117 sourced — u.ae names the Mars 2117 programme (MBRSC).
+     The 2040 boundary is NOT sourced: no UAE source publishes it, and
+     citing this page's own text as its provenance was circular.
      4     stated — "4 Pillars powering XperienceSpace"
    Everything the counters show is one of those, or subtraction between one of
    those and today's date. No percentages anywhere. No figure describes
