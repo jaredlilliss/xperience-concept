@@ -22,7 +22,7 @@
      paragraph, scroll, repeat — while both of Jared's reference sites (k95.it,
      ode.partners) are image-led and type-quiet. Measured, not described: 67
      images between them, ~2,400 characters of copy, largest heading 32px.
-     The old page could never get there because build_v3.py forbids <img>
+     The old page could never get there because build_v3.py forbids the img tag
      outright. Jared's ruling unlocked it: original imagery he owns is allowed.
 
      TWO DECISIONS, both taken FROM THE CONTENT rather than from taste:
@@ -131,9 +131,12 @@ body{
 .stop svg{
   display:block;overflow:visible;margin:0 auto;
   width:clamp(74px,8.4vw,128px);height:auto;
-  transition:width .42s cubic-bezier(.22,.61,.36,1);
+  transform-origin:50% 50%;
+  /* scale(), not width: animating width forces relayout AND SVG
+     re-rasterisation for 420ms on every arrival. transform is composited. */
+  transition:transform .42s cubic-bezier(.22,.61,.36,1);
 }
-.stop.on svg{width:clamp(112px,min(15.5vw,29vh),232px)}
+.stop.on svg{transform:scale(1.82)}
 .txt{
   position:absolute;left:50%;transform:translateX(-50%);
   width:max-content;max-width:21ch;text-align:center;
@@ -449,8 +452,6 @@ body{
              '<circle class="mark-fill" cx="31" cy="27" r="2.5"/></svg>',
     loop:    '<svg width="62" height="54" viewBox="0 0 62 54"><path class="mark" d="M6 40C6 18 26 8 40 18s10 26-4 26-16-16-4-22"/>'+
              '<circle class="mark-fill" cx="56" cy="16" r="2"/></svg>',
-    plan:    '<svg width="58" height="54" viewBox="0 0 58 54"><path class="mark" d="M8 16h42v26H8z"/>'+
-             '<path class="mark-soft" d="M22 16v26M36 16v26M8 29h42"/></svg>',
     mars:    '<svg width="66" height="66" viewBox="0 0 66 66"><circle class="mark mark-far" cx="33" cy="33" r="19"/>'+
              '<path class="mark-soft" d="M14 33h38"/><circle class="fill-far" cx="33" cy="33" r="4"/></svg>'
   };
@@ -462,7 +463,13 @@ body{
 
   /* the span is deliberately much wider than the screen: travelling it should
      take real distance, because the subject is 142 years long. */
-  var PAD  = 200;                       /* breathing room at both ends: the first
+  /* max(200, innerWidth/2): the focus test is |stop - centre| < innerWidth*0.26,
+     and at x=0 the centre is innerWidth/2. With PAD fixed at 200 the FIRST
+     milestone sat 568px from centre against a 399px threshold at 1536 - it
+     could never be focused on any viewport wider than ~833px. One of seven
+     stops was unreachable on every desktop. Everything positions off PAD, so
+     the span shifts uniformly and nothing else needs to change. */
+  var PAD  = Math.max(200, Math.round(innerWidth / 2));                       /* breathing room at both ends: the first
                                            stop sat at x=0 and translate(-50%) put
                                            half of it off-screen. */
   /* 11000px puts the dense 2019-2030 decade at roughly one screenful, so it
@@ -535,19 +542,17 @@ body{
       '<p class="sig">Jared Lilliss &middot; Lilliss IT</p>';
     rail.appendChild(e);
 
-    /* Both voids get labelled, honestly, rather than filled.
-       NOTE ON THE FIRST ONE: the Agency names no year for the NASA meeting, so
-       this page must NOT compute a span from it - 'NOTHING SOURCED IN BETWEEN'
-       is a statement about this page's own evidence, not about the UAE. */
-    [[1975, 2019, 'NOTHING SOURCED IN BETWEEN'],
-     [2028, 2117, (2117 - 2028) + ' YEARS · NOTHING ELSE SOURCED IN BETWEEN']
-    ].forEach(function(gp){
-      var g = document.createElement('p');
-      g.className = 'gap';
-      g.style.left = (PAD + (frac(gp[0]) + frac(gp[1])) / 2 * SPANPX) + 'px';
-      g.textContent = gp[2];
-      rail.appendChild(g);
-    });
+    /* THE VOIDS ARE DELIBERATELY UNLABELLED.
+       They used to carry "NOTHING SOURCED IN BETWEEN" (1975-2019) and
+       "89 YEARS · NOTHING ELSE SOURCED IN BETWEEN" (2028-2117). BOTH WERE
+       FALSE against this page's own verify ruling: §3 sources DubaiSat-1
+       (2009), DubaiSat-2 (2013), Nayif-1 (2017) and KhalifaSat (2018) inside
+       the first, and a Venus flyby 2028 / Earth 2029 / first asteroid flyby
+       2030 inside the second.
+       On a page that ends "Every date shown is sourced; nothing is estimated",
+       asserting an absence of sources the ruling contradicts is the worst
+       error available. An unlabelled gap asserts nothing. These return only
+       when derived from the data rather than hardcoded. */
   }
 
   /* ── travel ──────────────────────────────────────────────────────────── */
