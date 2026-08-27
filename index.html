@@ -278,6 +278,12 @@ footer b{color:var(--muted);font-weight:500}
 .js .rv{transition:opacity .6s cubic-bezier(.22,.8,.3,1),transform .6s cubic-bezier(.22,.8,.3,1)}
 .js .rv.in{opacity:1;transform:none}
 .no-js .rv{opacity:1;transform:none}
+/* A reveal container holding keyboard focus must be visible, whatever the
+   IntersectionObserver has or has not done yet. Six controls (the audience
+   filter buttons and the join CTAs) sit inside un-revealed .rv blocks at load,
+   and nothing else guarantees they become visible when focused - not for a
+   screen reader's virtual cursor, a find-in-page jump, or restored focus. */
+.js .rv:focus-within{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.js .rv{opacity:1;transform:none;transition:none}}
 </style>
 <style id="v3-interactive">
